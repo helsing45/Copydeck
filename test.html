@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+  <a id="a" target="_blank">Download CSV (via btoa)</a>
+  <script>
+    var csv = "a,b,c\n1,2,3\n";
+    var a = document.getElementById("a");
+    a.href = "data:text/csv;base64," + btoa(csv);
+  </script>
+  <hr/>
+  <a id="a2" download="Download.csv" type="text/csv">Download CSV (via Blob)</a>
+  <script>
+    var csv = "a,b,c\n1,2,3\n";
+    var data = new Blob([csv]);
+    var a2 = document.getElementById("a2");
+    a2.href = URL.createObjectURL(data);
+  </script>
+</body>
+</html>

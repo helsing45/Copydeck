@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var key = function(obj){
+  // some unique object-dependent key
+  return obj.totallyUniqueEmployeeIdKey; // just an example
+};
+
+var dict = {};        
+  function handleFileSelect()
+  {               
+    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+      alert('The File APIs are not fully supported in this browser.');
+      return;
+    }   
+
+    input = document.getElementById('fileinput');
+    if (!input) {
+      alert("Um, couldn't find the fileinput element.");
+    }
+    else if (!input.files) {
+      alert("This browser doesn't seem to support the `files` property of file inputs.");
+    }
+    else if (!input.files[0]) {
+      alert("Please select a file before clicking 'Load'");               
+    }
+    else {
+      file = input.files[0];
+      fr = new FileReader();
+      fr.onload = receivedText;
+      
+	 fr.readAsText(file,'ISO-8859-1');
+	 
+      //fr.readAsDataURL(file);
+    }
+  }
+
+  function receivedText() {
+    var xml = fr.result;
+	  xmlDoc = $.parseXML( xml );
+  $xml = $( xmlDoc );
+  
+  $xml.find("string").each(function () {
+				  $("#list").append("<li> ID:"+
+				  $(this).attr('name') + "  -Values ->"+
+				  $(this)[0].textContent +"</li>");
+            });
+  } 
+
+function test(){
+output = ({a:1,b:'2'});
+window.open('data:application/json;' + (window.btoa?'base64,'+btoa(JSON.stringify(output)):JSON.stringify(output)));
+}  
+
+</script>
+</head>
+<body>
+<input type="file" id="fileinput"/>
+<input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
+<input type='button' id='test' value='test' onclick='test();'></input>
+<div id="editor">
+<ul id="list">
+</ul>
+</div>
+<a id="a2" download="Download.xml" type="text/xml">Android-String-Fr</a>
+  <script>
+    var xml = "<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">CommonGrounds</string>
+    <string name="PROPERTY_ID" tools:ignore="TypographyDashes">UA-85339529-1</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Format -->
+    <string name="format_kilometer_accurate">%1$,.1f KM</string>
+    <string name="format_kilometer">%1$,.0f KM</string>
+    <string name="format_kilometer_1000">%1$,.0f+ KM</string>
+    <string name="format_meter">%1$,.0f M</string>
+    <string name="format_full_name">%1$s , %2$s</string>
+    <string name="format_day">$%.0f / day</string>
+    <string name="member_separator">,\u0020</string>
+    <string name="member_separator_last">\u0020and\u0020</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="remove_member">!! Are you sure to remove %1$s, %2$s? !!</string>
+    <string name="invite_member">!! Are you sure to invite %1$s, %2$s? !!</string>
+
+    <!-- Fonts -->
+    <string name="font_regular">fonts/helvetica_roman.ttf</string>
+    <string name="font_medium">fonts/helvetica_medium.ttf</string>
+    <string name="font_bold">fonts/helvetica_bold.ttf</string>
+
+    <!--From CoypDeck-->
+    <string name="home_text">A well curated workspace for creatives, startups and entrepreneurs</string>
+    <string name="menu_login">Log in</string>
+    <string name="home_create_account">Create account</string>
+    <string name="home_see_campuses">See campuses</string>
+    <string name="log_in_forgot_password"><b><u>Forgot password?</u></b></string>
+    <string name="create_account_title">Create an account</string>
+    <string name="create_account_first_name">First name</string>
+    <string name="create_account_last_name">Last name</string>
+    <string name="create_account_email">Email</string>
+    <string name="create_account_password">Password</string>
+    <string name="create_account_confirm_password">Confirm password</string>
+    <string name="create_account_mandatory">These fields are required</string>
+    <string name="loading">Loading...</string>
+    <string name="forgot_password_text">Please enter your email to recover your password.</string>
+    <string name="forgot_password_button">Recover my password</string>
+    <string name="email_validation_title">Account validation</string>
+    <string name="email_validation_text_1">An email confirmation has been sent to your email address.</string>
+    <string name="email_validation_text_2">Please confirm your email to validate your account.</string>
+    <string name="email_validation_confirmed">My email is confirmed</string>
+    <string name="email_validation_resend">Resend email confirmation</string>
+    <string name="email_validation_fail">The email hasn’t been confirmed. Please check your inbox or resend the email confirmation.</string>
+    <string name="email_validation_text_sent">An email has been sent with instructions on how to recover your password.</string>
+    <string name="menu_logout">Log out</string>
+    <string name="navigation_surrounding_title">Surroundings</string>
+    <string name="navigation_my_info_title">My info</string>
+    <string name="navigation_campuses_title">Campuses</string>
+    <string name="navigation_whats_next_title">What’s next?</string>
+    <string name="navigation_room_title">!! Conference rooms !!</string>
+    <string name="my_campus">My campus</string>
+    <string name="member_all_campuses">All campuses</string>
+    <string name="member_no_result">No results</string>
+    <string name="member_no_result_description">Sorry, we didn’t find a member corresponding to your search.</string>
+    <string name="member_skills">Skills</string>
+    <string name="member_campus">Campus</string>
+    <string name="contact_text">Contact</string>
+    <string name="description_text">Description</string>
+    <string name="campus_coming_soon">Coming soon</string>
+    <string name="error">Error</string>
+    <string name="error_content">We were unable to load the content, please try again later.</string>
+    <string name="retry">Retry</string>
+    <string name="subscribe_to_campus_title">Subscribe to this campus</string>
+    <string name="navigation_members_title">Members\' directory</string>
+    <string name="my_campus_see_plan">See plans</string>
+    <string name="format_month">$%.0f / month</string>
+    <string name="plan_whats_included">WHAT\'S INCLUDED?</string>
+    <string name="plan_terms">Terms</string>
+    <string name="plan_add_ons">Add-ons</string>
+    <string name="plan_subscribe_to_plan">Subscribe to this plan</string>
+    <string name="login_plan_subscribe">Please log in to subscribe to a plan.</string>
+    <string name="error_generic">An error has occurred. Please try again later.</string>
+    <string name="error_generic_transaction_failed_title">An error has occurred.</string>
+    <string name="error_generic_transaction_failed">We were unable to complete the transaction. Don\'t worry, you haven\'t been charged, please try again later or contact us directly.</string>
+    <string name="payment_confirmation_text1">Thank you for subscribing! You will be billed automatically at the start of each month. \n\n
+        You can change your method of payment anytime in the \'My info\' section.</string>
+    <string name="campus_surroundings">Surroundings</string>
+    <string name="my_info_title">My info</string>
+    <string name="my_info_my_plan">My plan</string>
+    <string name="my_info_invoice">Invoices</string>
+    <string name="my_info_payment">Payment method</string>
+    <string name="my_info_credit">!! Credit points !!</string>
+    <string name="profile_account">Account</string>
+    <string name="profile_required">These fields are required</string>
+    <string name="profile_change_password">Change my password</string>
+    <string name="profile_current_password">Current password</string>
+    <string name="profile_new_password">New password</string>
+    <string name="profile_confirm_password">Confirm new password</string>
+    <string name="invoice_detail_title">INVOICE</string>
+    <string name="invoice_detail_period_title">Period charged</string>
+    <string name="total_title">Total</string>
+    <string name="error_no_internet">No network</string>
+    <string name="error_no_internet_text">You have no internet connection. Please try again later.</string>
+    <string name="plan_no_invoice_title">No invoices</string>
+    <string name="plan_no_invoice_text">You don\'t have any invoices yet.</string>
+    <string name="member_company">Company</string>
+    <string name="plan_no_plan_title">No plan</string>
+    <string name="plan_no_plan_text">You’re not subscribed to a plan yet. Go to the «Campuses» section to look for the right campus and plan for you.</string>
+    <string name="member_search">Search</string>
+    <string name="tutorial_title_1">Welcome to the CommonGrounds community</string>
+    <string name="tutorial_content_1"><![CDATA[<center>CommonGrounds is a collaborative office workspace that serves as an accelerating platform for small businesses to grow.<br><br>We are creating an environment that stimulates creativity and productivity in a fun atmosphere.</center>]]></string>
+    <string name="tutorial_title_2">Connected workspace</string>
+    <string name="tutorial_content_2"><![CDATA[<center>The CommonGrounds mobile application will be the primary platform for everything CommonGrounds Workspace related.<br><br>Soon you will be able to:</center><br><br><ul><li>Book conference rooms</li><li>Publish and view job offers within the CommonGrounds network</li></ul>]]></string>
+    <string name="tutorial_title_3">Work in progress</string>
+    <string name="tutorial_content_3"><![CDATA[<center>The CommonGrounds project is moving fast and its mobile application is also progressing.<br><br>Upcoming versions of the app will offer new features, you can already start using it to browse the campuses, members, fill your account details and subscribe to a plan.<br><br>As soon as a new version is available, you will receive an update.</center>]]></string>
+    <string name="logout_title">Log out</string>
+    <string name="logout_desc">Are you sure you want to log out?</string>
+    <string name="logout_positive">Yes</string>
+    <string name="logout_negative">No</string>
+    <string name="change_password_success">Your password has been changed</string>
+    <string name="current_password_error">Please enter your current password</string>
+    <string name="payment_method_select">Please select your payment method.</string>
+    <string name="payment_method_android_pay_ready">Ready to use</string>
+    <string name="payment_method_credit_card">Credit card</string>
+    <string name="payment_method_ach">ACH</string>
+    <string name="payment_method_android_pay_configure">Configure Android Pay on this device</string>
+    <string name="bank_account_holder_name_hint">Name</string>
+    <string name="bank_account_phone_number_hint">Phone</string>
+    <string name="bank_account_routing_number_hint">123456789</string>
+    <string name="bank_account_account_number_hint">123456789123</string>
+    <string name="bank_account_type_hint">Choose your account type</string>
+    <string name="bank_account_holder_name">Account holder name</string>
+    <string name="card_holder_name_hint">Name</string>
+    <string name="bank_account_routing_number">Routing number</string>
+    <string name="bank_account_account_number">Account number</string>
+    <string name="bank_account_success_need_verification">Thank you, your bank account has successfully been added, but it still needs to be verified to confirm that you have access to it.</string>
+    <string name="payment_method_need_verify">Thank you, your bank account has successfully been added, but it still needs to be verified to confirm that you have access to it.</string>
+    <string name="payment_method_not_verified">not verified</string>
+    <string name="payment_method_verify">Verify my account</string>
+    <string name="bank_account_success">Thank you, your method of payment has successfully been set up.</string>
+    <string name="payment_method_current_default">This is your current default method of payment:</string>
+    <string name="card_edit_title">Card</string>
+    <string name="cancel_subscription_title">Cancel my plan</string>
+    <string name="cancel_subscription_text">Are you sure you want to cancel your plan?</string>
+    <string name="cancel_subscription_yes">Yes</string>
+    <string name="cancel_subscription_no">No</string>
+    <string name="cancel_subscription_succes_text">Thank you, your plan has successfully been canceled. You won\'t be able to subscribe to another plan until the end the month.</string>
+    <string name="subscription_one_day_text">Thank you for subscribing! Your subscription only lasts one day. Have a nice day!</string>
+    <string name="invoice_summary_accept">Accept</string>
+    <string name="plan_add_ons_title">Enhance your plan:</string>
+    <string name="plan_add_ons_button">Continue</string>
+    <string name="payment_method_confirm">Confirm payment method</string>
+    <string name="payment_method_select_another">Select another payment method</string>
+    <string name="payment_method_continue_with">Continue with %s</string>
+    <string name="payment_method_verify_bank_account">You must first verify your bank account</string>
+    <string name="payment_method_not_verify_text">Not verified</string>
+    <string name="payment_method_not_verify_toast">Your bank account has not been verified yet. Go to the \'My info\' section and then \'Payment method\' to verify your bank account.</string>
+    <string name="request_verification_description">At CommonGrounds Workspace, it is important to trust our members. Get in touch with us so we can get to know you personally before your subscription.</string>
+    <string name="request_verification">Request a verification</string>
+    <string name="payment_method_android_pay">Android Pay</string>
+    <string name="payment_method_no_android_pay">You can’t pay with Android Pay on this device</string>
+    <string name="request_verification_confirmation">The CommonGrounds Workspace team will contact you shortly for a meeting. After this you will be able to subscribe to any plan, thank you for patience.</string>
+    <string name="payment_method_no_apple_pay">You can’t pay with Apple Pay on this device</string>
+    <string name="payment_method_apple_pay">Apple Pay</string>
+    <string name="profile_phone">Phone number</string>
+    <string name="profile_zipcode">Zip code</string>
+    <string name="profile_birthday">Birthday</string>
+    <string name="profile_angellist">AngelList</string>
+    <string name="profile_twitter">Twitter</string>
+    <string name="profile_facebook">Facebook</string>
+    <string name="profile_linkedin">LinkedIn</string>
+    <string name="profile_instagram">Instagram</string>
+    <string name="profile_company_name">Company name</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="plan_unsubscribe_toast">You can’t subscribe to more than one plan. You must cancel your plan and wait until the end of your subscription before subscribing to a new plan.</string>
+    <string name="plan_subscribe_button">You\'re already subscribed to a plan</string>
+    <string name="plan_subscribe_button_canceled_period_toast">Your plan is canceled, but still active for the rest of its period. You will have to wait until the end of the period to subscribe to a new plan.</string>
+    <string name="plan_subscribe_button_canceled_period">Your plan is now canceled, but still active for the rest of its period</string>
+    <string name="profile_gallery">Choose from gallery</string>
+    <string name="profile_camera">Use camera</string>
+    <string name="profile_image_select">Select</string>
+    <string name="profile_no_subscription">You don\'t have any subscriptions yet</string>
+    <string name="card_last_four_format">Credit card ending with %s</string>
+    <string name="payment_method_verified">Verified</string>
+    <string name="bank_account_phone_number">Phone</string>
+    <string name="bank_account_type">Account Type</string>
+    <string name="bank_account_type_checking">Checking Account</string>
+    <string name="bank_account_type_saving">Saving Account</string>
+    <string name="empty_error_message">Cannot be empty</string>
+    <string name="profile_update">Profile Update</string>
+    <string name="card_holder_name">Card holder name</string>
+    <string name="map">Map</string>
+    <string name="gps_disable">No location found. Try again later</string>
+    <string name="done">Done</string>
+    <string name="summary_credit_feed">Save the credit card fees by using ACH instead</string>
+
+    <string name="credit_current">!! Current balance !!</string>
+    <string name="plan_no_credit_package_title">!! No credits available !!</string>
+    <string name="plan_no_credit_package_text">!! No credit package seem to be available for now try again later !!</string>
+    <string name="not_subscribe_credit_package_error_detail">!! You need to be subscribed to buy credit points!!</string>
+    <string name="no_credit_offer">!! No credit is offert with this plan !!</string>
+    <string name="plan_credit">!! Credit !!</string>
+    <string name="empty_room_title">!! No conference room !!</string>
+    <string name="empty_room_detail">!! This campus seem to have no room available !!</string>
+    <string name="room_detail_section_feature">!! Features !!</string>
+    <string name="room_detail_section_campus">!! Campus !!</string>
+    <string name="room_detail_section_descriptions">!! Descriptions !!</string>
+    <string name="whiteboard">!! Whiteboard !!</string>
+    <string name="screen_sharing">!! Screen Sharing !!</string>
+    <string name="television">!! Television !!</string>
+    <string name="check_availabilities">!! Check availabilities !!</string>
+    <string name="my_booking_title">!! My bookings !!</string>
+    <string name="credit_invoice_summary_accept">!! Buy credit points !!</string>
+    <string name="credit_purchase_succes">!! Credit points purchased !!</string>
+    <string name="credit_usage_detail">!! Credits are used to book conference rooms. !!</string>
+    <string name="credit_title">!! Credit points !!</string>
+    <string name="navigation_job_listing">!! Job Listing !!</string>
+    <string name="my_jobs_title">!! My job listings !!</string>
+    <string name="navigation_jobs_title">!! Jobs !!</string>
+    <string name="room_availabilities_title">!! Availabilities !!</string>
+    <string name="availabilities_checkout">!! Proceed to checkout !!</string>
+    <string name="no_selection_availabilities">!! No selection !!</string>
+
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="empty_booking_title">!! No booking !!</string>
+    <string name="empty_booking_detail">!! You don\'t have any booking !!</string>
+    <string name="empty_booking_detail_unsubsribe">!! You don\'t have any booking. You need to be subscribed to a plan before to book. !!</string>
+    <string name="empty_job_listing_title">!! No job !!</string>
+    <string name="empty_job_listing_detail">!! There\'s no job with the given criteria !!</string>
+    <string name="credit_cost_detail">!! %1$d x %2$d credit points !!</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_booking">!! Cancel my booking !!</string>
+    <string name="cancel_booking_descriptions">!! You\'re about to cancel this booking. Do you want to continue ?!!</string>
+    <string name="cancel_booking_title">!! Cancel booking !!</string>
+    <string name="confirm_booking">!! Confirm booking !!</string>
+    <string name="booking_succes">!! You have successfully book your room !!</string>
+    <string name="cancel_booking_succes">!! Your booking has been successfully remove !!</string>
+    <string name="job_listing_detail_service_section_title">Services</string>
+    <string name="owner_section_title">!! Owner !!</string>
+    <string name="not_enough_credit">!! Not enough credit !!</string>
+    <string name="error_cancel_booking_to_soon">!! You\'re to close to your booking you can\'t cancel !!</string>
+    <string name="job_listing_filter_title">!! Preferences !!</string>
+    <string name="job_filter">!! Preference !!</string>
+    <string name="business_services">!! Businesse services !!</string>
+    <string name="business_services_reset">!! Reset !!</string>
+    <string name="my_job_empty_detail">!! You don\'t have any job !!</string>
+    <string name="add_job_menu_item">!! Add a new job !!</string>
+    <string name="update_job_menu_item">!! Edit !!</string>
+    <string name="create_job">!! Create !!</string>
+    <string name="delete_job">!! Delete this job listing !!</string>
+    <string name="job_creation_succes">!! Job created !!</string>
+    <string name="job_name">Job title</string>
+    <string name="delete_job_title">!! Delete a job listing !!</string>
+    <string name="create_job_title">!! Create a job listing !!</string>
+    <string name="error_job_edition_no_service">!! Select at least one services !!</string>
+    <string name="delete_job_pop_up_description">!! You\'re about to delete this job listing. Do you want to continue ? !!</string>
+    <string name="job_delete_success">!! Job listing deleted successfully !!</string>
+    <string name="create_job_success">!! Job created successfully !!</string>
+    <string name="update_job_title">!! Update Job listing !!</string>
+    <string name="update_job_description">!! Job update successfully !!</string>
+    <string name="my_company_title">!! My company !!</string>
+    <string name="create_company">!! Create my company !!</string>
+    <string name="invitation_title">!! Invitations !!</string>
+    <string name="invitation_detail">!!The invitations you receive allow you to become a member of the corresponding company. You can only be in one company at a time.!!</string>
+    <string name="empty_invitation_title">!! No invitation !!</string>
+    <string name="empty_invitation_detail">!! No invitation for you !!</string>
+    <string name="invitation_sent">!! The invitation has been successfully sent to the member. !!</string>
+    <string name="join_success">!! Join successfully !!</string>
+    <string name="refuse_success">!! Invitation has been refuse !!</string>
+    <string name="refuse_invitate_confirmation">!! You\'re about to refuse this invite. Do you wish to continue ? !!</string>
+    <string name="member_section_title">!! Members !!</string>
+    <string name="members_invite">!! Invite !!</string>
+    <string name="error_company_member_required">!! You need to be in a company to post a job !!</string>
+    <string name="empty_room_unsubsribed">!! You need to be subsribed to a plan to book a room !!</string>
+    <string name="empty_booking_unsubsribed_detail">!! You don\'t have any booking yet. You need to be subscribed to a plan before to book. !!</string>
+    <string name="member_services">Members\' services</string>
+    <string name="buy_credit">!! But credit points !!</string>
+    <string name="company_edition_name">!! Name !!</string>
+    <string name="create_company_title">!! Create company !!</string>
+    <string name="leave_company">!! Leave company !!</string>
+    <string name="leave_company_detail">!! You\'re about to leave your company. Do you wish to continue ? !!</string>
+    <string name="leave_company_success">!! You have successfully left the company !!</string>
+    <string name="delete_company">!! You\'re about to leave your own company, the company will no longer exist and all its member will be left. Do you wish to continue ? !!</string>
+    <string name="delete_company_success">!! Your company has been deleted successfully !!</string>
+    <string name="edit_company">!! Edit company !!</string>
+    <string name="company_created_success">!! Company has been created !!</string>
+    <string name="company_edited_success">!! Company has been updated !!</string>
+    <string name="edit_job_title">!! Edit job listing !!</string>
+    <plurals name="account_credit_points">
+        <item quantity="zero">!! Personal credit point !!</item>
+        <item quantity="one">!! Personal credit point !!</item>
+        <item quantity="other">!! Personal credit points !!</item>
+    </plurals>
+    <plurals name="plan_credit_points">
+        <item quantity="zero">!! Plan credit point !!</item>
+        <item quantity="one">!! Plan credit point !!</item>
+        <item quantity="other">!! Plan credit points !!</item>
+    </plurals>
+    <plurals name="balance_credit_points">
+        <item quantity="zero">!! %s credit !!</item>
+        <item quantity="one">!! %s credit point !!</item>
+        <item quantity="other">!! %s credit points !!</item>
+    </plurals>
+    <plurals name="balance_credit_points_simple">
+        <item quantity="zero">!! credit point !!</item>
+        <item quantity="one">!! credit point !!</item>
+        <item quantity="other">!! credit points !!</item>
+    </plurals>
+    <plurals name="room_places">
+        <item quantity="zero">!! %d people !!</item>
+        <item quantity="one">!! %d people !!</item>
+        <item quantity="other">!! %d peoples !!</item>
+    </plurals>
+    <plurals name="room_credit_cost">
+        <item quantity="zero">!! %d credit point / 30 min !!</item>
+        <item quantity="one">!! %d credit point / 30 min !!</item>
+        <item quantity="other">!! %d credit points / 30 min !!</item>
+    </plurals>
+    <plurals name="room_credit_cost_long">
+        <item quantity="zero">!! %d credit point / half hour !!</item>
+        <item quantity="one">!! %d credit point / half hour !!</item>
+        <item quantity="other">!! %d credit points / half hour !!</item>
+    </plurals>
+    <plurals name="company_member">
+        <item quantity="zero">!! %d membre !!</item>
+        <item quantity="one">!! %d membre !!</item>
+        <item quantity="other">!! %d membres !!</item>
+    </plurals>
+
+</resources>
+";
+    var data = new Blob([xml]);
+    var a2 = document.getElementById("a2");
+    a2.href = URL.createObjectURL(data);
+  </script>
+</body>
+</html>
