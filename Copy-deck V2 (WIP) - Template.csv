@@ -1,0 +1,6 @@
+Section_ID,String_ID,Target,Plurial,fr,en,es
+01 - Login,login title,Mobile,,Courriel,Email,Correo electrónico
+01 - Login,password title,Mobile,,Mot de passe,Password,Contraseña
+02 - Notification,new notification count,IOS,,Vous avez {{number}} nouveau message,You have {{number}} new message,Tenemos {{number}} nuevo mensaje
+02 - Notification,new notification count,Mobile,X,Vous avez {{number}} nouveaux messages,You have {{number}} new messages,Tenemos {{number}} nuevos mensajes
+03 - Profile Detail,Name title,Mobile,,"Bonjour, comment allez vous ajourd'hui","Hi, you're look find today","Hola, ¿cómo estás Ajourd'hui"
