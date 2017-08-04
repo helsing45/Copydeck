@@ -28,14 +28,18 @@ function handleFileSelect(){
     var conversionFile = generateConvertionFile($.csv.toObjects(csv),firstLanguageIndex);
 	
 	var data = new Blob([conversionFile]);
-    $("#list").append('<li><a id="conversionFileLink" href="URL.createObjectURL('+data+')" download="conversionFile.xml" type="text/xml">ConversionFile</a></li>');   
+    $("#list").append('<li><a id="conversionFileLink" download="conversionFile.xml" type="text/xml">ConversionFile</a></li>'); 	
+    var conversionFileLink = document.getElementById("conversionFileLink");
+    conversionFileLink.href = URL.createObjectURL(data);	
 	
 	
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
 		var androidVarName = 'android-String-'+language;
-		var iosVarName = 'IOS-String-'+language;
-		$("#list").append('<li><a id="'+androidVarName+'" download="strings'+language+'.xml" type="text/xml">'+androidVarName+'</a></li>'); 		
+		var data = new Blob([generateStringFile(conversionFile,language)]);
+		$("#list").append('<li><a id="'+androidVarName+'" download="strings-'+language+'.xml" type="text/xml">'+androidVarName+'</a></li>');
+ 		var androidFileLink = document.getElementById(androidVarName);
+		androidFileLink.href = URL.createObjectURL(data);	
 	}
 	
 	for (i = firstLanguageIndex; i < headers.length; i++) {
