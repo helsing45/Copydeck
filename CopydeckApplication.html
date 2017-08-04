@@ -4,13 +4,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="jquery.csv.js"></script>
 <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
-<script>
-var key = function(obj){
-  // some unique object-dependent key
-  return obj.totallyUniqueEmployeeIdKey; // just an example
-};
-
-var dict = {};        
+<script> 
+    var conversionFile;
   function handleFileSelect()
   {               
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
@@ -38,19 +33,23 @@ var dict = {};
 
   function receivedText() {
     var csv = fr.result;
-    var conversionFile = generateConvertionFile($.csv.toObjects(csv));
-    var b = true;
+    conversionFile = generateConvertionFile($.csv.toObjects(csv));
+    $("#list").html('<li><a id="a2" download="conversionFile.xml" type="text/xml">ConversionFile</a></li>');   
+    
+    var data = new Blob([conversionFile]);
+    var a2 = document.getElementById("a2");
+    a2.href = URL.createObjectURL(data);
   }
 
-  function generateConvertionFile(csvDatas){
+function generateConvertionFile(csvDatas){
 	var grouped = _.groupBy(csvDatas,function(string) {
   return string.Section_ID;
 });
 var conversionFile = "<copydeck>";
-for (var k in grouped){
-    if (grouped.hasOwnProperty(k)) {
-	conversionFile += '<section id ="'+k+'">';
-         conversionFile += printConversionFileStrings(grouped[k]);
+for (var propreties in grouped){
+    if (grouped.hasOwnProperty(propreties)) {
+	conversionFile += '<section id ="'+propreties+'">';
+         conversionFile += printConversionFileStrings(grouped[propreties]);
 	conversionFile +="</section>";
     }
 }
@@ -59,22 +58,22 @@ return conversionFile;
 }
 
 function printConversionFileStrings(sectionStrings){
-	var result ="";
-//Group by stringId to check for plurial
-	var grouped = _.groupBy(sectionStrings, function(string){
-		return string.String_ID;
-	});
-	for (var k in grouped){
-    		if (grouped.hasOwnProperty(k)) {
-			if(grouped[k].length === 1){
+  var groups = _.groupBy(sectionStrings, function(value){
+        return value.Target + '#' + value.String_ID;
+    });
+
+    var result = "";
+    for(var propreties in groups){
+        if (groups.hasOwnProperty(propreties)) {
+            if(groups[propreties].length === 1){
 			// cas simple
-				result += printSimpleConversionFileString(grouped[k][0]);
+				result += printSimpleConversionFileString(groups[propreties][0]);
 			}else{
-				result += handleIdConflict(grouped[k]);	
+				result += handleIdConflict(groups[propreties]);	
 			}
-    		}
-	}
-	return result;
+        }
+    }
+    return result;
 }
 
 function printSimpleConversionFileString(string){
@@ -116,27 +115,20 @@ function toSnakeCase(unformattedString){
 	return lower.split(' ').join('_');
 }
 
- 
 
-function test(){
-output = ({a:1,b:'2'});
-window.open('data:application/json;' + (window.btoa?'base64,'+btoa(JSON.stringify(output)):JSON.stringify(output)));
-}  
 
 </script>
 </head>
 <body>
 <input type="file" id="fileinput"/>
 <input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
-<input type='button' id='test' value='test' onclick='test();'></input>
 <div id="editor">
 <ul id="list">
 </ul>
 </div>
-<a id="a2" download="Download.xml" type="text/xml">Android-String-Fr</a>
+<!--<a id="a2" download="Download.xml" type="text/xml">Android-String-Fr</a>-->
   <script>
-    var xml = "";
-    var data = new Blob([xml]);
+    var data = new Blob([conversionFile]);
     var a2 = document.getElementById("a2");
     a2.href = URL.createObjectURL(data);
   </script>
