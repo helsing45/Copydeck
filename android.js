@@ -35,9 +35,30 @@ function readSection(section){
 }
 
 /* Will change all the {{number}} for %d and {{text}} for %s*/
-function xmlToAndroidXmlString(unformattedString){
-	var numberFormattedString = unformattedString.split('{{number}}').join('%d');
-	var stringFormatted = numberFormattedString.split('{{text}}').join('%s');
+function xmlToAndroidXmlString(unformattedString){	
+	var numberFormattedString = numberFormat(unformattedString);
+	var stringFormatted = textFormat(numberFormattedString);
 	var androidFormatted = stringFormatted.split("'").join("\\'");
 	return androidFormatted;
+}
+
+function numberFormat(unformattedString){
+	return formatString(unformattedString,'{{number}}','d');	
+}
+
+function textFormat(unformattedString){	
+	return formatString(unformattedString,'{{text}}','s');	
+}
+
+function formatString(unformattedString, oldPattern, newPattern){
+	var splittedStrings = unformattedString.split(oldPattern);
+	var formattedString = "";
+	
+	for(var index = 0; index < splittedStrings.length - 1; index++){
+		var formattedVariable = '%' + (index + 1) + '$' + newPattern;
+		formattedString += splittedStrings[index];
+		formattedString += formattedVariable;		
+	}	
+	formattedString +=splittedStrings[splittedStrings.length - 1];
+	return formattedString;	
 }
