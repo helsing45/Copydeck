@@ -37,7 +37,7 @@ function handleFileSelect(){
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
 		var androidVarName = 'android-String-'+language;
-		var data = new Blob([generateStringFile(conversionFile,language)]);
+		var data = new Blob([generateAndroidStringFile(conversionFile,language)]);
 		$("#list").append('<li><a id="'+androidVarName+'" download="strings-'+language+'.xml" type="text/xml">'+androidVarName+'</a></li>');
  		var androidFileLink = document.getElementById(androidVarName);
 		androidFileLink.href = URL.createObjectURL(data);	
@@ -46,7 +46,10 @@ function handleFileSelect(){
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
 		var iosVarName = 'IOS-String-'+language;
-		$("#list").append('<li><a id="'+iosVarName+'" download="strings'+language+'.xml" type="text/xml">'+iosVarName+'</a></li>'); 		
+		var data = new Blob([generateIOSStringFile(conversionFile,language)]);
+		$("#list").append('<li><a id="'+iosVarName+'" download="Localizable-'+language+'.strings" type="text/strings">'+iosVarName+'</a></li>');
+ 		var androidFileLink = document.getElementById(iosVarName);
+		androidFileLink.href = URL.createObjectURL(data);		
 	}
   }
 

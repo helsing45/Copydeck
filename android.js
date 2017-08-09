@@ -1,18 +1,18 @@
 var language;
 
-function generateStringFile(conversionFile, language){
+function generateAndroidStringFile(conversionFile, language){
 	this.language = language;
 	var xmlDoc = jQuery.parseXML(conversionFile);
 	var stringXML = '<resources>\n';
 	for(var index = 0; index < xmlDoc.children[0].children.length; index++){
-		stringXML += readSection(xmlDoc.children[0].children[index]);
+		stringXML += readSectionForAndroidXML(xmlDoc.children[0].children[index]);
 	}
 	
 	stringXML += '</resources>';
 	return stringXML;
 }
 
-function readSection(section){
+function readSectionForAndroidXML(section){
 	var sectionXML ='<!-- ' + section.getAttribute("id") + ' -->\n';
 	for(var index = 0; index < section.children.length; index++){
 		var string = section.children[index];
