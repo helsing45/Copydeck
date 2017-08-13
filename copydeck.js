@@ -22,6 +22,7 @@ function handleFileSelect(){
       fr.readAsText(file,'UTF-8');
     }
   }
+
   function receivedText() {
     var csv = fr.result;
 	var headers = $.csv.toArrays(csv)[0];
@@ -43,14 +44,30 @@ function handleFileSelect(){
 		androidFileLink.href = URL.createObjectURL(data);	
 	}
 	
+    /* As the iOS way of handling locale files is based on the file structure, we need to generate a file structure, not the individual files
+     * To do so, we turn the languages into a zip file respecting the file structure required. EG:
+     *
+     * ├── en/
+     * │   └── Localizable.strings
+     * ├── es/
+     * │   └── Localizable.strings
+     * └── fr/
+     *     └── Localizable.strings  
+     */
+    var iOSZip = new JSZip();
+    var iOSVarName = "iOS-Locale";
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
-		var iosVarName = 'IOS-String-'+language;
-		var data = new Blob([generateIOSStringFile(conversionFile,language)]);
-		$("#list").append('<li><a id="'+iosVarName+'" download="Localizable-'+language+'.strings" type="text/strings">'+iosVarName+'</a></li>');
- 		var androidFileLink = document.getElementById(iosVarName);
-		androidFileLink.href = URL.createObjectURL(data);		
+        iOSZip.folder(language).file("Localizable.strings", generateIOSStringFile(conversionFile,language)) // Store the locale content in a subfile called Localizable.strings of the language
 	}
+    $("#list").append('<li><a id="' + iOSVarName + '" download="" type="text/xml">' + iOSVarName + '</a></li>'); // Append a list item to hold the iOS locale data
+    $("#" + iOSVarName).append('<div class="loader" id="iOS-Loader"> </div>') // Append a loading view to the item while waiting for the generation
+    iOSZip.generateAsync({type:"blob"}).then( // Generate the zip file asynchronously
+      function(content) {
+        var iOSFileLink = document.getElementById(iOSVarName);
+		iOSFileLink.href = URL.createObjectURL(content);
+        $("#iOS-Loader").remove() // Generation of the zip file is over - remove the loading view
+      });
   }
 
   
