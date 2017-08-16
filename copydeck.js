@@ -34,15 +34,22 @@ function handleFileSelect(){
     var conversionFileLink = document.getElementById("conversionFileLink");
     conversionFileLink.href = URL.createObjectURL(data);	
 	
-	
+	/* String d'android */
+	var androidZip = new JSZip();
+	var androidVarName = "android-Strings";
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
-		var androidVarName = 'android-String-'+language;
-		var data = new Blob([generateAndroidStringFile(conversionFile,language)]);
-		$("#list").append('<li><a id="'+androidVarName+'" download="strings-'+language+'.xml" type="text/xml">'+androidVarName+'</a></li>');
- 		var androidFileLink = document.getElementById(androidVarName);
-		androidFileLink.href = URL.createObjectURL(data);	
+        androidZip.folder("value-"+language).file("strings.xml", generateAndroidStringFile(conversionFile,language));
 	}
+	$("#list").append('<li><a id="' + androidVarName + '" download="" type="text/xml">' + androidVarName + '</a></li>');
+	$("#" + androidVarName).append('<div class="loader" id="android-Loader"> </div>');
+	 androidZip.generateAsync({type:"blob"}).then(
+      function(content) {
+        var androidFileLink = document.getElementById(androidVarName);
+		androidFileLink.href = URL.createObjectURL(content);
+        $("#android-Loader").remove()
+      });
+	
 	
     /* As the iOS way of handling locale files is based on the file structure, we need to generate a file structure, not the individual files
      * To do so, we turn the languages into a zip file respecting the file structure required. EG:
