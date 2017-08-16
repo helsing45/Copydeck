@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
 <body>
-<head>
-<meta charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="jquery.csv.js"></script>
-<script src="copydeck.js"></script>
-<script src="conversion-file.js"></script>
-<script src="android.js"></script>
-<script src="IOS.js"></script>
-<script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
-</head>
-<body>
-<input type="file" id="fileinput"/>
-<input type='button' id='btnLoad' value='Générer les fichiers de copydeck' onclick='handleFileSelect();'>
-<div id="editor">
-<ul id="list">
-</ul>
-</div>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="jquery.csv.js"></script>
+    <script src="copydeck.js"></script>
+    <script src="conversion-file.js"></script>
+    <script src="android.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> <!-- Import JSZip lib to zip iOS locales with structure -->
+    <script src="IOS.js"></script>
+    <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+  </head>
+  <body>
+    <input type="file" id="fileinput"/>
+    <input type='button' id='btnLoad' value='GÃ©nÃ©rer les fichiers de copydeck' onclick='handleFileSelect();'>
+    <div id="editor">
+      <ul id="list">
+      </ul>
+    </div>
+  </body>
 </html>
