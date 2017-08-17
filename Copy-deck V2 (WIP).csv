@@ -1,5 +1,5 @@
 Section_ID,String_ID,Target,Plurial,fr,en,es
-01 - Login,login title,Mobile,,Courriel,Email,Correo electrónico
+01 - Login,,Mobile,,Courriel,Email,Correo electrónico
 01 - Login,password title,Mobile,,Mot de passe,Password,Contraseña
 02 - Notification,new notification count,Mobile,,Vous avez {{number}} nouveau message,You have {{number}} new message,Tenemos {{number}} nuevo mensaje
 02 - Notification,new notification count,Mobile,X,Vous avez {{number}} nouveaux messages,You have {{number}} new messages,Tenemos {{number}} nuevos mensajes
@@ -8,3 +8,4 @@ Section_ID,String_ID,Target,Plurial,fr,en,es
 03 - Profile Detail,Invitation cancel,IOS,X,Souhaitez-vous vraiment annuler les invitations de {{text}},You're about to cancel all the invitations of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
 03 - Profile Detail,Invitation cancel,Android,,Vous etes sur le point d'annuler l'invitation de {{text}}. Voulez-vous continuer ?,You're about to cancel the invitation of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
 03 - Profile Detail,Invitation cancel,Android,X,Vous etes sur le point d'annuler les invitations de {{text}}. Voulez-vous continuer ?,You're about to cancel all the invitations of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
+01 - Login,,Mobile,,test,test,test

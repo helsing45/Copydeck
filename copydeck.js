@@ -1,5 +1,6 @@
 function handleFileSelect(){
-	$("#list").empty();           
+	$("#error").empty();
+	$("#results").empty();	
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
       alert('The File APIs are not fully supported in this browser.');
       return;
@@ -29,8 +30,10 @@ function handleFileSelect(){
 	var firstLanguageIndex = $.csv.toArrays(csv)[0].indexOf("Plurial") + 1;
     var conversionFile = generateConvertionFile($.csv.toObjects(csv),firstLanguageIndex);
 	
-	var data = new Blob([conversionFile]);
-    $("#list").append('<li><a id="conversionFileLink" download="conversionFile.xml" type="text/xml">ConversionFile</a></li>'); 	
+	showErrors(conversionFile.errors);
+	
+	var data = new Blob([conversionFile.copydeck]);
+    $("#results").append('<li><a id="conversionFileLink" download="conversionFile.xml" type="text/xml">ConversionFile</a></li>'); 	
     var conversionFileLink = document.getElementById("conversionFileLink");
     conversionFileLink.href = URL.createObjectURL(data);	
 	
@@ -39,9 +42,9 @@ function handleFileSelect(){
 	var androidVarName = "android-Strings";
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
-        androidZip.folder("value-"+language).file("strings.xml", generateAndroidStringFile(conversionFile,language));
+        androidZip.folder("value-"+language).file("strings.xml", generateAndroidStringFile(conversionFile.copydeck,language));
 	}
-	$("#list").append('<li><a id="' + androidVarName + '" download="" type="text/xml">' + androidVarName + '</a></li>');
+	$("#results").append('<li><a id="' + androidVarName + '" download="" type="text/xml">' + androidVarName + '</a></li>');
 	$("#" + androidVarName).append('<div class="loader" id="android-Loader"> </div>');
 	 androidZip.generateAsync({type:"blob"}).then(
       function(content) {
@@ -65,9 +68,9 @@ function handleFileSelect(){
     var iOSVarName = "iOS-Locale";
 	for (i = firstLanguageIndex; i < headers.length; i++) {
 		var language = headers[i];
-        iOSZip.folder(language).file("Localizable.strings", generateIOSStringFile(conversionFile,language)) // Store the locale content in a subfile called Localizable.strings of the language
+        iOSZip.folder(language).file("Localizable.strings", generateIOSStringFile(conversionFile.copydeck,language)) // Store the locale content in a subfile called Localizable.strings of the language
 	}
-    $("#list").append('<li><a id="' + iOSVarName + '" download="" type="text/xml">' + iOSVarName + '</a></li>'); // Append a list item to hold the iOS locale data
+    $("#results").append('<li><a id="' + iOSVarName + '" download="" type="text/xml">' + iOSVarName + '</a></li>'); // Append a list item to hold the iOS locale data
     $("#" + iOSVarName).append('<div class="loader" id="iOS-Loader"> </div>') // Append a loading view to the item while waiting for the generation
     iOSZip.generateAsync({type:"blob"}).then( // Generate the zip file asynchronously
       function(content) {
@@ -75,6 +78,12 @@ function handleFileSelect(){
 		iOSFileLink.href = URL.createObjectURL(content);
         $("#iOS-Loader").remove() // Generation of the zip file is over - remove the loading view
       });
+  }
+  
+  function showErrors(errors){
+	  for(var index=0; index < errors.length; index++){
+	  $("#error").append('<li>'+errors[index]+'</li>');
+	  }
   }
 
   
