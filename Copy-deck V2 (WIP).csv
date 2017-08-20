@@ -8,3 +8,10 @@ Section_ID,String_ID,Target,Plurial,fr,en,es
 03 - Profile Detail,Invitation cancel,IOS,X,Souhaitez-vous vraiment annuler les invitations de {{text}},You're about to cancel all the invitations of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
 03 - Profile Detail,Invitation cancel,Android,,Vous etes sur le point d'annuler l'invitation de {{text}}. Voulez-vous continuer ?,You're about to cancel the invitation of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
 03 - Profile Detail,Invitation cancel,Android,X,Vous etes sur le point d'annuler les invitations de {{text}}. Voulez-vous continuer ?,You're about to cancel all the invitations of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
+04 - Test cas extrem,,Mobile,,test Aucun ID,test Aucun ID,test Aucun ID
+04 - Test cas extrem,test,Mobile,,test un langage,,
+04 - Test cas extrem,test 2,Mobile,,\test backslash,\test backslash,\test backslash
+04 - Test cas extrem,test 3,Mobile,,"""test guillemet""","""test guillemet""","""test guillemet"""
+04 - Test cas extrem,test4,Mobile,,test caractere speciaux & < >,test caractere speciaux & < >,test caractere speciaux & < >
+04 - Test cas extrem,test5 ,Mobile,,test id espace fin,test id espace fin,test id espace fin
+04 - Test cas extrem,test 6,Mobile,,,,

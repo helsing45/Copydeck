@@ -38,8 +38,7 @@ function readSectionForAndroidXML(section){
 function xmlToAndroidXmlString(unformattedString){	
 	var numberFormattedString = numberFormat(unformattedString);
 	var stringFormatted = textFormat(numberFormattedString);
-	var androidFormatted = stringFormatted.split("'").join("\\'");
-	return androidFormatted;
+	return stringFormatted.replaceAll("'","\\'").toXmlFormat();
 }
 
 function numberFormat(unformattedString){
