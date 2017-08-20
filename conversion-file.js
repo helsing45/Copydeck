@@ -76,7 +76,7 @@ function handleIdConflict(stringIdConflict) {
 }
 
 function printPlurialConversionFileString(plurialsFile) {
-    var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID.trim()) + '" target="' + plurialsFile[0].Target + '">';
+    var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID) + '" target="' + plurialsFile[0].Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
         result += '<' + key + '>';
@@ -94,7 +94,7 @@ function formatValue(unformattedString){
 }
 
 function toSnakeCase(unformattedString) {
-    return unformattedString.toLowerCase().replaceAll(' ','_');
+    return unformattedString.trim().toLowerCase().replaceAll(' ','_');
 }
 
 function isAllLangageEmpty(csvLine){
