@@ -1,3 +1,17 @@
+
+
+String.prototype.removeAll = function(caract){
+	return this.split(caract).join('');
+}
+
+String.prototype.replaceAll = function(oldCaract,newCaract){
+	return this.split(oldCaract).join(newCaract);
+}
+
+String.prototype.toXmlFormat = function(oldCaract,newCaract){
+	return this.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+}
+
 function handleFileSelect() {
     $("#error").empty();
     $("#results").empty();
