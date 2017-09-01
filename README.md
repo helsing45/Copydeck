@@ -59,4 +59,4 @@ iOS-Locale.zip
 [//]: # 
 
 [Language Codes]: <https://msdn.microsoft.com/fr-fr/en%C2%ADus/library/ms533052(d=printer,v=vs.85).aspx>
-[Input Exemple]:<https://github.com/helsing45/Copydeck/tree/gh-pages/doc/Copy-deck V2 (WIP).csv>
+[Input Exemple]:<https://github.com/helsing45/Copydeck/blob/gh-pages/doc/Copy-deck%20V2%20(WIP).csv>
