@@ -44,7 +44,7 @@ function showAndroidStringDownloadLink(languages, copydeck) {
         zip.folder("values" + (index > 0 ?"-"+ language: "")).file("strings.xml", generateAndroidStringFile(copydeck, language));
     }
     
-    $("#results").append('<li class="download Android"><a id="android-Strings" download="" type="text/xml">android-Strings</a></li>');
+    $("#results").append('<li class="download Android"><a id="android-Strings" download="android-String" type="text/xml">android-Strings</a></li>');
     zip.generateAsync({
         type: "blob"
     }).then( // Generate the zip file asynchronously
@@ -59,10 +59,10 @@ function showIOSStringDownloadLink(languages, copydeck) {
 
     for (var index = 0; index < languages.length; index++) {
         var language = languages[index];
-        zip.folder(language).file("Localizable.strings", generateIOSStringFile(copydeck, language));
+        zip.folder(index == 0 ? "Base.lproj": language +".lproj").file("Localizable.strings", generateIOSStringFile(copydeck, language));
     }
 
-    $("#results").append('<li class="download IOS"><a id="iOS-Locale" download="" type="text/xml">iOS-Locale</a></li>');
+    $("#results").append('<li class="download IOS"><a id="iOS-Locale" download="iOS-Locale" type="text/xml">iOS-Locale</a></li>');
     zip.generateAsync({
         type: "blob"
     }).then( // Generate the zip file asynchronously
