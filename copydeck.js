@@ -37,44 +37,37 @@ function showConversionFileDownloadLink(copydeck) {
 }
 
 function showAndroidStringDownloadLink(languages, copydeck) {
-    showStringFileDownloadLink({
-        downloadVariableName: "android-Strings",
-        folderPrefix: "value-",
-        languages: languages,
-        fileName: "strings.xml",
-		downloadClass:"Android",
-        fileGeneration: function(copydeck, language) {
-            return generateAndroidStringFile(copydeck, language);
-        }
-    }, copydeck);
-}
-
-function showIOSStringDownloadLink(languages, copydeck) {
-    showStringFileDownloadLink({
-        downloadVariableName: "iOS-Locale",
-        folderPrefix: "",
-        languages: languages,
-        fileName: "Localizable.strings",
-		downloadClass:"IOS",
-        fileGeneration: function(copydeck, language) {
-            return generateIOSStringFile(copydeck, language);
-        }		
-    }, copydeck);
-}
-
-function showStringFileDownloadLink(downloadItem, copydeck) {
     var zip = new JSZip();
-    var variableName = downloadItem.device + "-download-variable";
-    for (var index = 0; index < downloadItem.languages.length; index++) {
-        var langage = downloadItem.languages[index];
-        zip.folder(downloadItem.folderPrefix + langage).file(downloadItem.fileName, downloadItem.fileGeneration(copydeck, langage));
+
+    for (var index = 0; index < languages.length; index++) {
+        var language = languages[index];
+        zip.folder("values" + (index > 0 ?"-"+ language: "")).file("strings.xml", generateAndroidStringFile(copydeck, language));
     }
-    $("#results").append('<li class="download '+downloadItem.downloadClass+' "><a id="' + downloadItem.downloadVariableName + '" download="" type="text/xml">' + downloadItem.downloadVariableName + '</a></li>');
+    
+    $("#results").append('<li class="download Android"><a id="android-Strings" download="android-String" type="text/xml">android-Strings</a></li>');
     zip.generateAsync({
         type: "blob"
     }).then( // Generate the zip file asynchronously
         function(content) {
-            var fileLink = document.getElementById(downloadItem.downloadVariableName);
+            var fileLink = document.getElementById("android-Strings");
+            fileLink.href = URL.createObjectURL(content);
+        });
+}
+
+function showIOSStringDownloadLink(languages, copydeck) {   
+    var zip = new JSZip();
+
+    for (var index = 0; index < languages.length; index++) {
+        var language = languages[index];
+        zip.folder(index == 0 ? "Base.lproj": language +".lproj").file("Localizable.strings", generateIOSStringFile(copydeck, language));
+    }
+
+    $("#results").append('<li class="download IOS"><a id="iOS-Locale" download="iOS-Locale" type="text/xml">iOS-Locale</a></li>');
+    zip.generateAsync({
+        type: "blob"
+    }).then( // Generate the zip file asynchronously
+        function(content) {
+            var fileLink = document.getElementById("iOS-Locale");
             fileLink.href = URL.createObjectURL(content);
         });
 }
