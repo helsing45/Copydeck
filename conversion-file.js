@@ -1,19 +1,63 @@
 var firstLanguageIndex;
 var errors = [];
 
+function isStringIdUnique(id, ids) {
+    if(ids == null || ids.length == 0){
+        return null;
+    }
+    for (var index = 0; index < ids.length; index++) {
+        var element = ids[index];
+        if (element.ID === id) {
+            return element;
+        }    
+    }
+    return null;
+}
+
+
 function generateConvertionFile(csvDatas, firstLanguageIndex) {
     this.firstLanguageIndex = firstLanguageIndex;
 
     var validCsvDatas = [];
+    var readLinesID = [];
+    var lineIsValid;
     for (var line = 0; line < csvDatas.length; line++) {
-        if (csvDatas[line].String_ID.length == 0) {
-            errors.push("Erreur la ligne: " + line + " ne contient pas d'ID pour identifier la strings.");
-        } else if (isAllLangageEmpty(csvDatas[line])) {
-            errors.push("Erreur la ligne: " + line + " ne contient aucune valeur");
-        } else {
-            validCsvDatas.push(csvDatas[line]);
+        lineIsValid = true;
+        if (csvDatas[line].String_ID.length == 0) {            
+            errors.push("Erreur la ligne: " + (line + 2) + " ne contient pas d'ID pour identifier la strings.");
+            lineIsValid = false;
+        }else{
+            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plurial.trim().length == 0 ? "_singular" : "_plurial") + "_"+csvDatas[line].Target;
+            var element = isStringIdUnique(tempStringId, readLinesID);
+            if (element != null) {
+                element.lines.push(line);
+                lineIsValid = false;
+            }else{
+                readLinesID.push({"lines": [line], "ID": tempStringId});
+            }
         }
+        if (isAllLangageEmpty(csvDatas[line])) {
+            errors.push("Erreur la ligne: " + (line + 2) + " ne contient aucune valeur");
+        }
+        
     }
+
+    var duplicatesStringId = readLinesID.filter(function(element){
+        return element.lines.length > 1;
+    });
+
+    duplicatesStringId.forEach(function(element){
+        var error = "Les lignes ";
+        for(var index = 0; index < element.lines.length; index++){
+            error += element.lines[index];
+            if(index < element.lines.length - 1){
+                error += ", ";
+            }
+        }
+        error += " on le même id";
+        errors.push(error);
+    });
+
 
     var grouped = _.groupBy(validCsvDatas, function (string) {
         return string.Section_ID;
