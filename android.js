@@ -3,7 +3,8 @@ var language;
 function generateAndroidStringFile(conversionFile, language) {
 	this.language = language;
 	var xmlDoc = jQuery.parseXML(conversionFile);
-	var stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + new Date() + '--> \n<resources>\n';
+	var date = moment().format("MMMM Do YYYY, h:mm:ss a");
+	var stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + date + '--> \n<resources>\n';
 	for (var index = 0; index < xmlDoc.children[0].children.length; index++) {
 		stringXML += (index > 0 ? "\n" : "") + readSectionForAndroidXML(xmlDoc.children[0].children[index]);
 	}
@@ -13,7 +14,7 @@ function generateAndroidStringFile(conversionFile, language) {
 }
 
 function readSectionForAndroidXML(section) {
-	var sectionXML = '<!-- ' + section.getAttribute("id") + ' -->\n';
+	var sectionXML = section.getAttribute("id").length == 0 ? "" :'<!-- ' + section.getAttribute("id") + ' -->\n';
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "Android") {

@@ -2,14 +2,14 @@ var firstLanguageIndex;
 var errors = [];
 
 function isStringIdUnique(id, ids) {
-    if(ids == null || ids.length == 0){
+    if (ids == null || ids.length == 0) {
         return null;
     }
     for (var index = 0; index < ids.length; index++) {
         var element = ids[index];
         if (element.ID === id) {
             return element;
-        }    
+        }
     }
     return null;
 }
@@ -21,45 +21,54 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
     var validCsvDatas = [];
     var readLinesID = [];
     var lineIsValid;
+
     for (var line = 0; line < csvDatas.length; line++) {
         lineIsValid = true;
-        if (csvDatas[line].String_ID.length == 0) {            
-            errors.push("Erreur la ligne: " + (line + 2) + " ne contient pas d'ID pour identifier la strings.");
+        if (csvDatas[line].String_ID.trim().length == 0) {
+            errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
-        }else{
-            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plurial.trim().length == 0 ? "_singular" : "_plurial") + "_"+csvDatas[line].Target;
+        } else {
+            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plurial.trim().length == 0 ? "_singular" : "_plurial") + "_" + csvDatas[line].Target;
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
-                element.lines.push(line);
+                element.lines.push((line + 2));
                 lineIsValid = false;
-            }else{
-                readLinesID.push({"lines": [line], "ID": tempStringId});
+            } else {
+                readLinesID.push({ "lines": [(line + 2)], "ID": tempStringId });
             }
         }
         if (isAllLangageEmpty(csvDatas[line])) {
-            errors.push("Erreur la ligne: " + (line + 2) + " ne contient aucune valeur");
+            lineIsValid = false;
+            errors.push("Error line: " + (line + 2) + " doesn't have any string value");
         }
-        
+
+        if (lineIsValid) {
+            validCsvDatas.push(csvDatas[line]);
+        }
+
     }
 
-    var duplicatesStringId = readLinesID.filter(function(element){
+    var duplicatesStringId = readLinesID.filter(function (element) {
         return element.lines.length > 1;
     });
 
-    duplicatesStringId.forEach(function(element){
-        var error = "Les lignes ";
-        for(var index = 0; index < element.lines.length; index++){
+    duplicatesStringId.forEach(function (element) {
+        var error = "Error lines: ";
+        for (var index = 0; index < element.lines.length; index++) {
             error += element.lines[index];
-            if(index < element.lines.length - 1){
+            if (index < element.lines.length - 1) {
                 error += ", ";
             }
         }
-        error += " on le même id";
+        error += " have the same ID";
         errors.push(error);
     });
 
+    var sorted = validCsvDatas.sort(function (a, b) {
+        return (a.Section_ID === null) - (b.Section_ID === null) || +(a.Section_ID > b.Section_ID) || -(a.Section_ID < b.Section_ID);
+    });
 
-    var grouped = _.groupBy(validCsvDatas, function (string) {
+    var grouped = _.groupBy(sorted, function (string) {
         return string.Section_ID;
     });
 

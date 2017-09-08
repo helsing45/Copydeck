@@ -3,7 +3,9 @@ var language;
 function generateIOSStringFile(conversionFile, language) {
 	this.language = language;
 	var xmlDoc = jQuery.parseXML(conversionFile);
-	var stringsFile = '/* \n  Localizable.strings \n Generation time : ' + new Date() + '\n  */\n';
+	
+	var date = moment().format("MMMM Do YYYY, h:mm:ss a");
+	var stringsFile = '/* \n  Localizable.strings \n Generation time : ' + date + '\n  */\n';
 	for (var index = 0; index < xmlDoc.children[0].children.length; index++) {
 		stringsFile += readSectionForLocalizableFile(xmlDoc.children[0].children[index]);
 	}
@@ -11,7 +13,7 @@ function generateIOSStringFile(conversionFile, language) {
 }
 
 function readSectionForLocalizableFile(section) {
-	var sectionStringsFile = '\n/* ' + section.getAttribute("id") + ' */ \n';
+	var sectionStringsFile =  section.getAttribute("id").length == 0 ? "\n" :'\n/* ' + section.getAttribute("id") + ' */ \n';
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "IOS") {
