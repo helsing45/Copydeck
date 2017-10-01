@@ -18,13 +18,13 @@ function readSectionForLocalizableFile(section) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "IOS") {
 			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {
-				sectionStringsFile += '"' + string.getAttribute("id") + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
+				sectionStringsFile += '"' + string.getAttribute("id").toUpperCase() + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
 			} else {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one")[0].childNodes[0].nodeValue;
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many")[0].childNodes[0].nodeValue;
 
-				sectionStringsFile += '"' + string.getAttribute("id") + '_singular" = "' + xmlToLocalizableString(single) + '";\n';
-				sectionStringsFile += '"' + string.getAttribute("id") + '_plural" = "' + xmlToLocalizableString(plural) + '";\n';
+				sectionStringsFile += '"' + string.getAttribute("id").toUpperCase() + '_SINGULAR" = "' + xmlToLocalizableString(single) + '";\n';
+				sectionStringsFile += '"' + string.getAttribute("id").toUpperCase() + '_PLURAL" = "' + xmlToLocalizableString(plural) + '";\n';
 			}
 		}
 	}
