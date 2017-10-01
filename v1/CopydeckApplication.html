@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+   <body>
+      <head>
+         <meta charset="UTF-8">
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+         <script src="jquery.csv.js"></script>
+         <script src="jszip.js"></script>
+         <script src="copydeck.js"></script>
+         <script src="conversion-file.js"></script>
+         <script src="android.js"></script>
+         <script src="IOS.js"></script>		 
+         <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+         <script src="http://momentjs.com/downloads/moment.js"></script>
+         <link rel="stylesheet" type="text/css" href="style.css">
+      </head>
+      <body background="9343.jpg">
+         <div class="drop-zone">
+            <p>Drag file here or click to upload</p>
+         </div>
+         <div class="error-container">
+            <ul id="error"></ul>
+         </div>
+         <div class="output">
+            <div class="results-container">
+               <ul id="results"></ul>
+            </div>
+         </div>
+         <script type="text/javascript">
+            (function(window) {
+              function triggerCallback(e, callback) {
+                if(!callback || typeof callback !== 'function') {
+                  return;
+                }
+                var files;
+                if(e.dataTransfer) {
+                  files = e.dataTransfer.files;
+                } else if(e.target) {
+                  files = e.target.files;
+                }
+                callback.call(null, files);
+              }
+              function makeDroppable(ele, callback) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('multiple', true);
+                input.style.display = 'none';
+                input.addEventListener('change', function(e) {
+                  triggerCallback(e, callback);
+                });
+                ele.appendChild(input);
+                
+                ele.addEventListener('dragover', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  ele.classList.add('dragover');
+                });
+            
+                ele.addEventListener('dragleave', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  ele.classList.remove('dragover');
+                });
+            
+                ele.addEventListener('drop', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  ele.classList.remove('dragover');
+                  triggerCallback(e, callback);
+                });
+                
+                ele.addEventListener('click', function() {
+                  input.value = null;
+                  input.click();
+                });
+              }
+              window.makeDroppable = makeDroppable;
+            })(this);
+            (function(window) {
+              makeDroppable(window.document.querySelector('.drop-zone'), function(files) {
+            file = files[0];
+            fr = new FileReader();
+            fr.onload = receivedText;
+            fr.readAsText(file, 'UTF-8');
+              });
+            })(this);
+         </script>
+   </body>
+</html>
