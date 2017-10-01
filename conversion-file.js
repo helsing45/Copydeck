@@ -111,7 +111,7 @@ function printSimpleConversionFileString(string) {
     var result = '<string id="' + toSnakeCase(string.String_ID) + '" target="' + string.Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(string).length; i++) {
         var key = Object.keys(string)[i];
-        result += '<' + key + '>' + formatValue(string[key]) + '</' + key + '>';
+        result += '<' + key + " html='"+ string[key].isHTMLFormat() +"'>" + formatValue(string[key]) + '</' + key + '>';
     }
     result += '</string>';
     return result;
@@ -125,7 +125,6 @@ function handleIdConflict(stringIdConflict) {
             return printSimpleConversionFileString(stringIdConflict[0]) + printSimpleConversionFileString(stringIdConflict[1]);
         }
     }
-
 }
 
 function printPlurialConversionFileString(plurialsFile) {
@@ -133,12 +132,16 @@ function printPlurialConversionFileString(plurialsFile) {
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
         result += '<' + key + '>';
-        result += (plurialsFile[0].Plurial === "" ? "<one>" : "<many>") + formatValue(plurialsFile[0][key]) + (plurialsFile[0].Plurial === "" ? "</one>" : "</many>");
-        result += (plurialsFile[1].Plurial === "" ? "<one>" : "<many>") + formatValue(plurialsFile[1][key]) + (plurialsFile[1].Plurial === "" ? "</one>" : "</many>");
+        result += '<' + getQuantity(plurialsFile[0]) + " html='"+ plurialsFile[0][key].isHTMLFormat() +"'>" + formatValue(plurialsFile[0][key]) + "</" + getQuantity(plurialsFile[0]) +">";
+        result += '<' + getQuantity(plurialsFile[1]) + " html='"+ plurialsFile[1][key].isHTMLFormat() +"'>" + formatValue(plurialsFile[1][key]) + "</" + getQuantity(plurialsFile[1]) +">";
         result += '</' + key + '>';
     }
     result += '</string>';
     return result;
+}
+
+function getQuantity(string){
+    return string.Plurial === "" ? "one" : "many";
 }
 
 function formatValue(unformattedString) {
