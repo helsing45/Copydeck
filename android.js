@@ -43,7 +43,7 @@ function xmlToAndroidXmlString(valueXml) {
 	var numberFormattedString = numberFormat(valueXml[0].childNodes[0].nodeValue);
 	var stringFormatted = textFormat(numberFormattedString).replaceAll("'", "\\'");
 	if(valueXml[0].getAttribute("html") == "true"){
-		return "<![CDATA["+ stringFormatted +"]]>";
+		return stringFormatted;
 	}else{
 		return stringFormatted.toXmlFormat();
 	}
