@@ -28,7 +28,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
         } else {
-            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plurial.trim().length == 0 ? "_singular" : "_plurial") + "_" + csvDatas[line].Target;
+            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plural.trim().length == 0 ? "_singular" : "_plural") + "_" + csvDatas[line].Target;
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
                 element.lines.push((line + 2));
@@ -120,14 +120,14 @@ function printSimpleConversionFileString(string) {
 function handleIdConflict(stringIdConflict) {
     if (stringIdConflict.length === 2) {
         if (stringIdConflict[0].Target === stringIdConflict[1].Target) {
-            return printPlurialConversionFileString(stringIdConflict);
+            return printPluralConversionFileString(stringIdConflict);
         } else {
             return printSimpleConversionFileString(stringIdConflict[0]) + printSimpleConversionFileString(stringIdConflict[1]);
         }
     }
 }
 
-function printPlurialConversionFileString(plurialsFile) {
+function printPluralConversionFileString(plurialsFile) {
     var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID) + '" target="' + plurialsFile[0].Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
@@ -141,12 +141,17 @@ function printPlurialConversionFileString(plurialsFile) {
 }
 
 function getQuantity(string){
-    return string.Plurial === "" ? "one" : "many";
+    return string.Plural === "" ? "one" : "many";
 }
 
 function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
-    return unformattedString.removeAll('\\').removeAll('"').toXmlFormat();
+    //TODO don't replace all backstack
+    //TODO replace all \u2019 by \u0027 .split("\u2019").join("\u0027");
+    //TODO don't remove "
+    //TODO don't remove \n
+    return unformattedString.replaceAll('\u2019','\u0027').toXmlFormat();
+    //return unformattedString.removeAll('\\').removeAll('"').toXmlFormat();
 }
 
 function toSnakeCase(unformattedString) {

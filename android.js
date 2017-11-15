@@ -40,6 +40,7 @@ function readSectionForAndroidXML(section) {
 function xmlToAndroidXmlString(valueXml) {
 	//string.getElementsByTagName(this.language)
 	//string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue
+	//TODO handle float
 	var numberFormattedString = numberFormat(valueXml[0].childNodes[0].nodeValue);
 	var stringFormatted = textFormat(numberFormattedString).replaceAll("'", "\\'");
 	if(valueXml[0].getAttribute("html") == "true"){

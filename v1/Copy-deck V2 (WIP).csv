@@ -1,4 +1,4 @@
-Section_ID,String_ID,Target,Plurial,fr,en,es
+Section_ID,String_ID,Target,Plural,fr,en,es
 01 - Login,login title,Mobile,,Courriel,Email,Correo electrónico
 01 - Login,password title,Mobile,,Mot de passe,Password,Contraseña
 02 - Notification,new notification count,Mobile,,Vous avez {{number}} nouveau message,You have {{number}} new message,Tenemos {{number}} nuevo mensaje

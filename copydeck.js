@@ -27,7 +27,7 @@ String.prototype.isHTMLFormat = function(){
 function receivedText() {
     var csv = fr.result;
     var headers = $.csv.toArrays(csv)[0];
-    var firstLanguageIndex = $.csv.toArrays(csv)[0].indexOf("Plurial") + 1;
+    var firstLanguageIndex = $.csv.toArrays(csv)[0].indexOf("Plural") + 1;
     var conversionFile = generateConvertionFile($.csv.toObjects(csv), firstLanguageIndex);
 
     var languages = [];

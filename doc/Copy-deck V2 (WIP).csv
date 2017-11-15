@@ -1,4 +1,4 @@
-Section_ID,String_ID,Android_ID,IOS_ID,Target,Plurial,fr,en,es
+Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural,fr,en,es
 04 - Test cas extrem,,android_ID,IOS_ID,Mobile,,Test avec des IDs individuel,Test avec des IDs individuel,Test avec des IDs individuel
 01 - Login,login title,,,Mobile,,Courriel,Email,Correo electrónico
 01 - Login,password title,,,Mobile,,Mot de passe,Password,Contraseña

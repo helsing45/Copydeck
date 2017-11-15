@@ -1,3 +1,6 @@
+/**
+ * This file handle every method to create the conversion file
+ */
 var firstLanguageIndex;
 var errors = [];
 
@@ -28,7 +31,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
         } else {
-            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plurial.trim().length == 0 ? "_singular" : "_plurial") + "_" + csvDatas[line].Target;
+            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plural.trim().length == 0 ? "_singular" : "_plurial") + "_" + csvDatas[line].Target;
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
                 element.lines.push((line + 2));
@@ -120,14 +123,14 @@ function printSimpleConversionFileString(string) {
 function handleIdConflict(stringIdConflict) {
     if (stringIdConflict.length === 2) {
         if (stringIdConflict[0].Target === stringIdConflict[1].Target) {
-            return printPlurialConversionFileString(stringIdConflict);
+            return printPluralConversionFileString(stringIdConflict);
         } else {
             return printSimpleConversionFileString(stringIdConflict[0]) + printSimpleConversionFileString(stringIdConflict[1]);
         }
     }
 }
 
-function printPlurialConversionFileString(plurialsFile) {
+function printPluralConversionFileString(plurialsFile) {
     var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID) + '" target="' + plurialsFile[0].Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
@@ -141,7 +144,7 @@ function printPlurialConversionFileString(plurialsFile) {
 }
 
 function getQuantity(string){
-    return string.Plurial === "" ? "one" : "many";
+    return string.Plural === "" ? "one" : "many";
 }
 
 function formatValue(unformattedString) {

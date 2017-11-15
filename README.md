@@ -17,7 +17,7 @@ The Csv must meet some specific requirements;
 |Section_ID|Represents a section identifier for organizing strings.|
 |String_ID|The identifier of the string, must be unique, except in the case where you have the plurals of a string, in this case only you must have the same identifier for the plural string and for the singular string.|
 |Target|This column indicates on which platform the string is used|
-|Plurial|Indicates which of the two strings (having the same identifier) is the plural.|
+|Plural|Indicates which of the two strings (having the same identifier) is the plural.|
 
 #### Language column
 All the columns that are found after the Plural column are the languages their headers should represent the following language code: [Language Codes]
