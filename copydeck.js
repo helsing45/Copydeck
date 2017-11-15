@@ -13,6 +13,18 @@ String.prototype.toXmlFormat = function(){
     //return this.replaceAll('&','&amp;');
 }
 
+String.prototype.removeBackslash = function(){
+    var result = "";
+    for (var i = 0, len = this.length; i < len; i++) {
+        var currentCaract = this[i];
+        if(currentCaract =='\\' && this[i + 1] != 'n'){
+            continue;
+        }
+        result += currentCaract;
+    }
+    return result;
+}
+
 String.prototype.fromXmlFormat = function(){
     return this
     .replaceAll('&amp;','&')

@@ -147,10 +147,9 @@ function getQuantity(string){
 function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
     //TODO don't replace all backstack
-    //TODO replace all \u2019 by \u0027 .split("\u2019").join("\u0027");
     //TODO don't remove "
     //TODO don't remove \n
-    return unformattedString.replaceAll('\u2019','\u0027').toXmlFormat();
+    return unformattedString.replaceAll('\u2019','\u0027').removeBackslash().removeAll('"').toXmlFormat();
     //return unformattedString.removeAll('\\').removeAll('"').toXmlFormat();
 }
 
