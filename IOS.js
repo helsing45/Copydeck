@@ -33,7 +33,8 @@ function readSectionForLocalizableFile(section) {
 
 function xmlToLocalizableString(unformattedString) {
 	//TODO handle float
-	var numberFormattedString = unformattedString.split('{{number}}').join('%d');
-	var textFormattedString = numberFormattedString.split('{{text}}').join('%@');
+	var quoteFormattedString = unformattedString.replaceAll('"','\\"')
+	var numberFormattedString = quoteFormattedString.replaceAll('{{number}}','%d');
+	var textFormattedString = numberFormattedString.replaceAll('{{text}}','%@');
 	return textFormattedString;
 }
