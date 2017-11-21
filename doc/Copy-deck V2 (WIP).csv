@@ -11,6 +11,13 @@ Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural,fr,en,es
 03 - Profile Detail,Invitation cancel,,,Android,X,Vous etes sur le point d'annuler les invitations de {{text}}. Voulez-vous continuer ?,You're about to cancel all the invitations of {{text}},Estás a punto de cancelar todas las invitaciones de {{text}}
 04 - Test cas extrem,,,,Mobile,,test Aucun ID,test Aucun ID,test Aucun ID
 04 - Test cas extrem,test,,,Mobile,,test un langage,,
+04 - Test cas extrem,test_trim,,,Mobile,,   espace to trim   ,,
+04 - Test cas extrem,test_float,,,Mobile,,test first float: {{float:2}} the second is {{float:10}},,
+04 - Test cas extrem,test_float_2,,,Mobile,,test first float: {{float:}},,
+04 - Test cas extrem,test_float_3,,,Mobile,,test first float: {{float}},,
+04 - Test cas extrem,test_float_4,,,Mobile,,test first float: {{float}} second float {{float}},,
+04 - Test cas extrem,test_float_5,,,Mobile,,test first float: {{float:}} second float {{float:}},,
+04 - Test cas extrem,test_float_5,,,Mobile,,test first float: {{float}} second float {{float:}},,
 04 - Test cas extrem,test 2,,,Mobile,,\test backslash,\test backslash,\test backslash
 04 - Test cas extrem,test 3,,,Mobile,,"""test guillemet""","""test guillemet""","""test guillemet"""
 04 - Test cas extrem,test4,,,Mobile,,test caractere speciaux & < >,test caractere speciaux & < >,test caractere speciaux & < >
@@ -22,4 +29,4 @@ Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural,fr,en,es
 04 - Test cas extrem,test 7,,,Mobile,,Test avec un text d'un \n  breakline,Test avec un text d'un \n breakline,Test avec un text d'un \n breakline
 04 - Test cas extrem,   ,,,Mobile,,Test string id espace,,
 ,empty_section_string_two,,,Mobile,,Je n'ai pas de section,,
-04 - Test cas extrem,value_html,,,Mobile,,Ce texte comprend des element <b> HTML </b> </br> ce qui veus dire que l'on doit gerer differement,This text as <b> HTML </b>element </br>we sould handle this with care,
+04 - Test cas extrem,value_html,,,Mobile,,Ce texte comprend des element <b> HTML </b> </br> ce qui veus dire que l'on doit gerer differement,This text as <b> HTML </b>element <br/>we sould handle this with care,

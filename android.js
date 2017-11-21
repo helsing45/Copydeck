@@ -14,7 +14,7 @@ function generateAndroidStringFile(conversionFile, language) {
 }
 
 function readSectionForAndroidXML(section) {
-	var sectionXML = section.getAttribute("id").length == 0 ? "" :'<!-- ' + section.getAttribute("id") + ' -->\n';
+	var sectionXML = section.getAttribute("id").length == 0 ? "" : '<!-- ' + section.getAttribute("id") + ' -->\n';
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "Android") {
@@ -36,19 +36,22 @@ function readSectionForAndroidXML(section) {
 	return sectionXML;
 }
 
+
+
 /* Will change all the {{number}} for %d and {{text}} for %s*/
 function xmlToAndroidXmlString(valueXml) {
 	//string.getElementsByTagName(this.language)
 	//string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue
 	//TODO handle float
-	var numberFormattedString = numberFormat(valueXml[0].childNodes[0].nodeValue);
+	var floatFormattedString = floatTextFormat(valueXml[0].childNodes[0].nodeValue);
+	var numberFormattedString = numberFormat(floatFormattedString);
 	var stringFormatted = textFormat(numberFormattedString).replaceAll("'", "\\'");
-	if(valueXml[0].getAttribute("html") == "true"){
+	if (valueXml[0].getAttribute("html") == "true") {
 		return stringFormatted;
-	}else{
+	} else {
 		return stringFormatted.toXmlFormat();
 	}
-	
+
 }
 
 function numberFormat(unformattedString) {
@@ -57,6 +60,29 @@ function numberFormat(unformattedString) {
 
 function textFormat(unformattedString) {
 	return formatString(unformattedString, '{{text}}', 's');
+}
+
+function floatTextFormat(unformattedString) {
+	// Replace float with no custom decimal
+	unformattedString = unformattedString.replaceAll('{{float}}', '%f').replaceAll('{{float:}}', '%f');
+
+	//Prepare to replace the float with custom decimal;
+	var regex = /{{float:\d+}}/g;
+	var matchs = unformattedString.match(regex);
+	//If the string is already well formatted we don't continue.
+	if (matchs != null) {
+		for (var index = 0; index < matchs.length; index++) {
+			var decimal = matchs[index].substring(8, matchs[index].length - 2);
+			unformattedString = unformattedString.replaceAll(matchs[index], '%.' + decimal + 'f')
+		}
+	}
+
+	
+	var indexes = unformattedString.indexesOf('%');
+	for (var index = indexes.length - 1; index >= 0; index--) {
+		unformattedString = unformattedString.replaceAt(indexes[index],('%' + (index + 1) + '$'));
+	}
+	return unformattedString;
 }
 
 function formatString(unformattedString, oldPattern, newPattern) {
