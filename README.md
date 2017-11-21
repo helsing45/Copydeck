@@ -28,6 +28,7 @@ The __first column of languages__ will be defined as the default. (Base.lproj or
 | ------ | ------ |
 |{{number}}|Indicates that the string will be composed of a parameter that is a numeric|
 |{{text}}|Indicates that the string will be composed of a parameter that is a text.|
+|{{float:precision}}|Indicates that the string will be composed of a parameter that is a float. The precision parameter is optional, it's use to determine what is the maximal decimal. By exemple, the output of {{float}} is %f and {{float:2}} is %.2f|
 
 #### Additional Column
 If you want to add comment columns or any other columns that are not used for file generation, you must add them before the Plural column.
@@ -56,6 +57,24 @@ iOS-Locale.zip
     |-> {langage-code}.lproj
         |-> Localizable.strings
 ```
+# Release notes
+## v0.2.3
+_NEW:_
+* Now handle float tags.
+
+_IMPROVEMENT:_ 
+* The conversionFile generation algorithm has been improve:
+    * The character ’ (\u2019) is now replaced by ' (\u0027).
+    * No longer remove quotation mark, the IOS resource generation algorithm handle this case by adding backslash before the quotation mark.
+    * The backslash are no longer remove if the next character is _n_ so now \n are no longer break by the algorithm.
+    * The strings are now trim before being add to the file.
+
+_FIX:_ 
+* The column Plurial is now name plural
+* The plurals of IOS are no longer _plurial it's been correct to _plural
+
+
+
 [//]: # 
 
 [Language Codes]: <https://msdn.microsoft.com/fr-fr/en%C2%ADus/library/ms533052(d=printer,v=vs.85).aspx>
