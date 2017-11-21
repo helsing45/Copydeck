@@ -148,7 +148,7 @@ function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
     //TODO don't replace all backstack
     //TODO don't remove "
-    return unformattedString.replaceAll('\u2019','\u0027').removeBackslash().toXmlFormat();
+    return unformattedString.trim().replaceAll('\u2019','\u0027').removeBackslash().toXmlFormat();
 }
 
 function toSnakeCase(unformattedString) {
