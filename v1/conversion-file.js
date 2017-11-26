@@ -1,6 +1,3 @@
-/**
- * This file handle every method to create the conversion file
- */
 var firstLanguageIndex;
 var errors = [];
 
@@ -31,7 +28,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
         } else {
-            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plural.trim().length == 0 ? "_singular" : "_plurial") + "_" + csvDatas[line].Target;
+            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plural.trim().length == 0 ? "_singular" : "_plural") + "_" + csvDatas[line].Target;
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
                 element.lines.push((line + 2));
@@ -149,7 +146,9 @@ function getQuantity(string){
 
 function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
-    return unformattedString.removeAll('\\').removeAll('"').toXmlFormat();
+    //TODO don't replace all backstack
+    //TODO don't remove "
+    return unformattedString.trim().replaceAll('\u2019','\u0027').removeBackslash().toXmlFormat();
 }
 
 function toSnakeCase(unformattedString) {

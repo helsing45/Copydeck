@@ -13,6 +13,30 @@ String.prototype.toXmlFormat = function(){
     //return this.replaceAll('&','&amp;');
 }
 
+String.prototype.indexesOf = function(caract){
+    var indexes = [];
+    for(var i=0; i<this.length;i++) {
+        if (this[i] === caract) indexes.push(i);
+    }
+    return indexes;
+}
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0,index) + replacement + this.substr(index + 1);
+}
+
+String.prototype.removeBackslash = function(){
+    var result = "";
+    for (var i = 0, len = this.length; i < len; i++) {
+        var currentCaract = this[i];
+        if(currentCaract =='\\' && this[i + 1] != 'n'){
+            continue;
+        }
+        result += currentCaract;
+    }
+    return result;
+}
+
 String.prototype.fromXmlFormat = function(){
     return this
     .replaceAll('&amp;','&')
