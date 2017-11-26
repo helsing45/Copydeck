@@ -30,9 +30,29 @@ function readSectionForLocalizableFile(section) {
 	}
 	return sectionStringsFile;
 }
+function handleFloatString(unformattedString){
+	// Replace float with no custom decimal
+	unformattedString = unformattedString.replaceAll('{{float}}','%f').replaceAll('{{float:}}','%f');
+
+	//Prepare to replace the float with custom decimal;
+	var regex =/{{float:\d+}}/g;
+	var matchs = unformattedString.match(regex);
+	//If the string is already well formatted we don't continue.
+	if(matchs == null){
+		return unformattedString;
+	}
+
+	for(var index = 0; index < matchs.length; index++){
+		var decimal = matchs[index].substring(8, matchs[index].length - 2);
+		unformattedString = unformattedString.replaceAll(matchs[index],'%.' + decimal + 'f')
+	}
+	return unformattedString;
+}
 
 function xmlToLocalizableString(unformattedString) {
-	var numberFormattedString = unformattedString.split('{{number}}').join('%d');
-	var textFormattedString = numberFormattedString.split('{{text}}').join('%@');
-	return textFormattedString;
+	//TODO handle float
+	var quoteFormattedString = unformattedString.replaceAll('"','\\"')
+	var numberFormattedString = quoteFormattedString.replaceAll('{{number}}','%d');
+	var textFormattedString = numberFormattedString.replaceAll('{{text}}','%@');
+	return handleFloatString(textFormattedString);
 }
