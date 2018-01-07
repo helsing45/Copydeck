@@ -13,7 +13,7 @@ function onResourceReceived(resources) {
         .map(iOSMapFunction)
         .sort(sortAlphaEmptyFirst));
 
-    merge(androidString, IOSString);
+    createCsv(merge(androidString, IOSString),androidString.languages);
 }
 
 function androidMapFunction(element) {
@@ -73,7 +73,6 @@ function extractStringFromAndroid(xmlDocs) {
 
             stringValueArray.push({
                 id: idVar,
-                languages: languageArray,
                 values: valueArray
             });
 
@@ -96,13 +95,16 @@ function extractStringFromAndroid(xmlDocs) {
             });
             stringValueArray.push({
                 id: idVar + '_plural',
-                languages: languageArray,
                 values: pluralValueArray
             });
 
         }
     }
-    return stringValueArray;
+    return {
+        target:"Android",
+        languages: languageArray,
+        values:stringValueArray
+    };
 }
 
 function extractStringFromIOS(xmlDocs) {
@@ -134,12 +136,15 @@ function extractStringFromIOS(xmlDocs) {
 
         stringValueArray.push({
             id: idVar,
-            languages: languageArray,
             values: valueArray
         });
 
     });
-    return stringValueArray;
+    return {
+        target:"IOS",
+        languages: languageArray,
+        values:stringValueArray
+    };
 }
 
 function merge() {
@@ -151,31 +156,134 @@ function merge() {
         args.push(arguments[i]);
     }
 
-    args[0].forEach(function(stringValue){
+    /** First we merge all the list together **/
+    mergeResult = [];
+    args[0].values.forEach(function(stringValue){
+        idResult = {
+            ids:[{
+                target:args[0].target,
+                id:stringValue.id
+            }],
+            values:stringValue.values            
+        }
+
         for (argIndex = 1; argIndex < args.length; argIndex++) {
             var result = findClosed(stringValue,args[argIndex]);
-            console.log("Was looking for " + stringValue + " has found " +result.value.values[0])            
+            if(result.distance == 0){
+                idResult.ids.push({
+                    target:args[argIndex].target,
+                    id:result.value.id
+                });
+            }else{
+                mergeResult.push({
+                    ids:[{
+                        target:args[argIndex].target,
+                        id:result.value.id
+                    }],
+                    values:result.value.values            
+                });
+            }            
         }
+        mergeResult.push(idResult);
+    });
+
+
+    /** Then we handle plurials **/
+    finalResult = [];
+    plurialArray = [];
+    mergeResult.forEach(function(r){        
+        if(containsSingular(r.ids) || containsPlural(r.ids)){
+            plurialArray.push(r);
+        }else{
+            finalResult.push({
+                ids:r.ids,
+                singular:r.values})
+        }
+    });
+
+    for(i=0;i<plurialArray.length;i++){
+        item1 = plurialArray[i];
+        for(j=0;j<plurialArray.length;j++){
+            if(j == i){
+                continue;
+            }
+
+            item2 = plurialArray[j];
+            if(idsEquivalent(item1.ids, item2.ids)){
+                finalResult.push({
+                    ids:clearPlurialSingularFromIds(item1.ids),
+                    singular:containsSingular(item1.ids) ? item1.values :item2.values,
+                    plural:containsPlural(item1.ids) ? item1.values :item2.values});
+                    continue;
+            }
+        }
+    }
+
+    return finalResult;
+}
+
+/*Return true if for the same target the string without _singular / _plural are equals */
+function idsEquivalent(ids1, ids2) {
+   ids1 = clearPlurialSingularFromIds(ids1);
+   ids2 = clearPlurialSingularFromIds(ids2);
+    for (id1Index = 0; id1Index < ids1.length; id1Index++) {
+        for (let id2Index = 0; id2Index < ids2.length; id2Index++) {
+            if (ids1[id1Index].target == ids2[id2Index].target && ids1[id1Index].id != ids2[id2Index].id) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function clearPlurialSingularFromIds(ids){
+    return ids.map(x => {
+        return {target: x.target, id: x.id.removeAll('_plural').removeAll('_singular')}
     });
 }
 
-function findClosed(stringValueToMatch, arrays) {
+function containsSingular(array) {
+    var result;
+    array.forEach(function (item) {
+        if (item.id.toLocaleLowerCase().includes("_singular")) {
+            result = true;
+        }
+    });
+    return result;
+}
+
+function containsPlural(array) {
+    var result;
+    array.forEach(function (item) {
+        if (item.id.toLocaleLowerCase().includes("_plural")) {
+            result = true;
+        }
+    });
+    return result;
+}
+
+function createCsv(linesFile, languages){
+    var result = "Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural,"+languages.join();
+
+}
+
+function findClosed(stringValueToMatch, fileToMatch) {
     var closestDistance = Infinity;
     var currentResult;
-    for (i = 0; i < arrays.length; i++) {
+    for (i = 0; i < fileToMatch.values.length; i++) {
         var tempDistance = 0;
-        for (langaguageIndex = 0; langaguageIndex < stringValueToMatch.values.length; langaguageIndex++) {
-            tempDistance += levenshtein_distance(stringValueToMatch.values[langaguageIndex], arrays[i].values[langaguageIndex]);
+        for (languageIndex = 0; languageIndex < stringValueToMatch.values.length; languageIndex++) {
+            tempDistance += levenshtein_distance(stringValueToMatch.values[languageIndex], fileToMatch.values[i].values[languageIndex]);
         }
         if (tempDistance == 0) {
             return {
                 distance: tempDistance,
-                value: arrays[i]
+                value: fileToMatch.values[i]
             };
         }
         if (closestDistance > tempDistance) {
             closestDistance = tempDistance
-            currentResult = arrays[i];
+            currentResult = fileToMatch.values[i];
         }
     };
     return {
