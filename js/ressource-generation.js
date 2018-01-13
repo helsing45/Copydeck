@@ -1,4 +1,5 @@
 function onResourceReceived(resources) {
+    //ANDROID Conversion file
     var androidString = extractStringFromAndroid(
         resources.filter(function (resourceFile) {
             return resourceFile.name.startsWith('values')
@@ -6,6 +7,7 @@ function onResourceReceived(resources) {
         .map(androidMapFunction)
         .sort(sortAlphaEmptyFirst));
 
+    //IOS Conversion file
     var IOSString = extractStringFromIOS(
         resources.filter(function (resourceFile) {
             return resourceFile.name.endsWith('.lproj')
@@ -13,7 +15,15 @@ function onResourceReceived(resources) {
         .map(iOSMapFunction)
         .sort(sortAlphaEmptyFirst));
 
-    createCsv(merge(androidString, IOSString),androidString.languages);
+    showCSVFileLink(createCsv(regroupSingularPluralValue(findEquivalent(androidString, IOSString)), androidString.languages));
+}
+
+function showCSVFileLink(csv) {
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'copydeck.csv';
+    hiddenElement.click();
 }
 
 function androidMapFunction(element) {
@@ -101,9 +111,9 @@ function extractStringFromAndroid(xmlDocs) {
         }
     }
     return {
-        target:"Android",
+        target: "Android",
         languages: languageArray,
-        values:stringValueArray
+        values: stringValueArray
     };
 }
 
@@ -141,91 +151,110 @@ function extractStringFromIOS(xmlDocs) {
 
     });
     return {
-        target:"IOS",
+        target: "IOS",
         languages: languageArray,
-        values:stringValueArray
+        values: stringValueArray
     };
 }
 
-function merge() {
-    if (arguments.length < 2) {
-        return arguments.length == 1 ? arguments[0] : null;
-    }
-    var args = [];
-    for (i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-    }
-
-    /** First we merge all the list together **/
+function findEquivalent(list1, list2) {
     mergeResult = [];
-    args[0].values.forEach(function(stringValue){
-        idResult = {
-            ids:[{
-                target:args[0].target,
-                id:stringValue.id
-            }],
-            values:stringValue.values            
-        }
+    list2UnfoundIndex = Array.apply(null, {
+        length: list2.values.length
+    }).map(Number.call, Number)
+    list1.values.forEach(function (mainValue) {
 
-        for (argIndex = 1; argIndex < args.length; argIndex++) {
-            var result = findClosed(stringValue,args[argIndex]);
-            if(result.distance == 0){
-                idResult.ids.push({
-                    target:args[argIndex].target,
-                    id:result.value.id
-                });
-            }else{
+        for (let valuesIndex = 0; valuesIndex < list2.values.length; valuesIndex++) {
+            const value = list2.values[valuesIndex];
+            var distance = 0;
+            var foundMatch = false;
+            for (let languageIndex = 0; languageIndex < mainValue.values.length; languageIndex++) {
+                distance += levenshtein_distance(mainValue.values[languageIndex], value.values[languageIndex]);
+            }
+            if (distance == 0) {
+                foundMatch = true;
+                list2UnfoundIndex.splice(list2UnfoundIndex.indexOf(valuesIndex), 1);
+
                 mergeResult.push({
-                    ids:[{
-                        target:args[argIndex].target,
-                        id:result.value.id
+                    ids: [{
+                        target: list1.target,
+                        id: mainValue.id
+                    }, {
+                        target: list2.target,
+                        id: value.id
                     }],
-                    values:result.value.values            
+                    values: value.values
                 });
-            }            
+                break;
+            }
         }
-        mergeResult.push(idResult);
+
+        if (!foundMatch) {
+            mergeResult.push({
+                ids: [{
+                    target: list1.target,
+                    id: mainValue.id
+                }],
+                values: mainValue.values
+            });
+        }
     });
 
+    list2UnfoundIndex.forEach(function (i) {
+        mergeResult.push({
+            ids: [{
+                target: list2.target,
+                id: list2.values[i].id
+            }],
+            values: list2.values[i].values
+        });
+    });
+    return mergeResult;
+}
 
+function regroupSingularPluralValue(unformattedList) {
     /** Then we handle plurials **/
-    finalResult = [];
+    formattedList = [];
     plurialArray = [];
-    mergeResult.forEach(function(r){        
-        if(containsSingular(r.ids) || containsPlural(r.ids)){
-            plurialArray.push(r);
-        }else{
-            finalResult.push({
-                ids:r.ids,
-                singular:r.values})
-        }
-    });
+    singularArray = [];
 
-    for(i=0;i<plurialArray.length;i++){
-        item1 = plurialArray[i];
-        for(j=0;j<plurialArray.length;j++){
-            if(j == i){
+    for (let index = 0; index < unformattedList.length; index++) {
+        const r = unformattedList[index];
+        if (containsSingular(r.ids)) {
+            singularArray.push(r);
+            continue;
+        }
+        if (containsPlural(r.ids)) {
+            plurialArray.push(r);
+            continue;
+        }
+        formattedList.push({
+            ids: r.ids,
+            singular: r.values
+        });
+    }
+
+    plurialArray.forEach(function (pluralElement) {
+        for (j = 0; j < singularArray.length; j++) {
+            singularItem = singularArray[j];
+            if (idsEquivalent(pluralElement.ids, singularItem.ids)) {
+                formattedList.push({
+                    ids: clearPlurialSingularFromIds(pluralElement.ids),
+                    singular: singularItem.values,
+                    plural: pluralElement.values
+                });
                 continue;
             }
-
-            item2 = plurialArray[j];
-            if(idsEquivalent(item1.ids, item2.ids)){
-                finalResult.push({
-                    ids:clearPlurialSingularFromIds(item1.ids),
-                    singular:containsSingular(item1.ids) ? item1.values :item2.values,
-                    plural:containsPlural(item1.ids) ? item1.values :item2.values});
-                    continue;
-            }
         }
-    }
+    });
 
-    return finalResult;
+    return formattedList;
 }
 
 /*Return true if for the same target the string without _singular / _plural are equals */
 function idsEquivalent(ids1, ids2) {
-   ids1 = clearPlurialSingularFromIds(ids1);
-   ids2 = clearPlurialSingularFromIds(ids2);
+    ids1 = clearPlurialSingularFromIds(ids1);
+    ids2 = clearPlurialSingularFromIds(ids2);
     for (id1Index = 0; id1Index < ids1.length; id1Index++) {
         for (let id2Index = 0; id2Index < ids2.length; id2Index++) {
             if (ids1[id1Index].target == ids2[id2Index].target && ids1[id1Index].id != ids2[id2Index].id) {
@@ -236,35 +265,84 @@ function idsEquivalent(ids1, ids2) {
     return true;
 }
 
-function clearPlurialSingularFromIds(ids){
+function clearPlurialSingularFromIds(ids) {
     return ids.map(x => {
-        return {target: x.target, id: x.id.removeAll('_plural').removeAll('_singular')}
+        return {
+            target: x.target,
+            id: x.id.removeAll('_plural').removeAll('_singular')
+        }
     });
 }
 
 function containsSingular(array) {
-    var result;
+    var result = false;
     array.forEach(function (item) {
-        if (item.id.toLocaleLowerCase().includes("_singular")) {
-            result = true;
-        }
+        result = result || item.id.toLocaleLowerCase().includes("_singular");
     });
     return result;
 }
 
 function containsPlural(array) {
-    var result;
+    var result = false;
     array.forEach(function (item) {
-        if (item.id.toLocaleLowerCase().includes("_plural")) {
-            result = true;
+        result = result || item.id.toLocaleLowerCase().includes("_plural");
+    });
+    return result;
+}
+
+function createCsv(linesFile, languages) {
+    var result = "Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural," + languages.join() + "\n";
+    linesFile.forEach(function (line) {
+        result += getFormattedCsvLine(line, false) + "\n"
+        if (line["plural"] !== undefined) {
+            result += getFormattedCsvLine(line, true) + "\n"
         }
     });
     return result;
 }
 
-function createCsv(linesFile, languages){
-    var result = "Section_ID,String_ID,Android_ID,IOS_ID,Target,Plural,"+languages.join();
+function getFormattedCsvLine(infoLine, isPlural) {
+    formattedString = "";
+    //Section_ID
+    formattedString += ",";
+    //String_ID
+    if (infoLine.ids.length == 1) {
+        formattedString += infoLine.ids[0].id + ","
+        //Android_ID
+        formattedString += ",";
+        //IOS_ID
+        formattedString += ",";
+        //Target
+        formattedString += infoLine.ids[0].target + ","
+    } else {
+        if (infoLine.ids[0].id == infoLine.ids[1].id) {
+            formattedString += infoLine.ids[0].id + ","
+            //Android_ID
+            formattedString += ",";
+            //IOS_ID
+            formattedString += ",";
+        } else {
+            formattedString += ",";
+            //Android_ID
+            formattedString += (infoLine.ids[0].target == "Android" ? infoLine.ids[0].id : infoLine.ids[1].id) + ",";
+            //IOS_ID
+            formattedString += (infoLine.ids[0].target == "IOS" ? infoLine.ids[0].id : infoLine.ids[1].id) + ",";
+        }
+        //Target
+        formattedString += "Mobile,";
+    }
 
+    //Plural
+    formattedString += isPlural ? "X," : ",";
+
+    var values = infoLine[isPlural ? "plural" : "singular"];
+    for (let index = 0; index < values.length; index++) {
+        formattedString += '"' +values[index] +'"';
+        if (index < values.length - 1) {
+            formattedString += ",";
+        }
+    }
+    return formattedString;
 }
 
 function findClosed(stringValueToMatch, fileToMatch) {
