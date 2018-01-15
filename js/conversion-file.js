@@ -24,17 +24,22 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
 
     for (var line = 0; line < csvDatas.length; line++) {
         lineIsValid = true;
-        if (csvDatas[line].String_ID.trim().length == 0) {
+        if ((csvDatas[line].hasOwnProperty('IOS_ID') && csvDatas[line].IOS_ID.trim().length == 0)
+            && (csvDatas[line].hasOwnProperty('Android_ID') && csvDatas[line].Android_ID.trim().length == 0)
+            && csvDatas[line].String_ID.trim().length == 0) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
         } else {
-            var tempStringId = toSnakeCase(csvDatas[line].String_ID) + (csvDatas[line].Plural.trim().length == 0 ? "_singular" : "_plural") + "_" + csvDatas[line].Target;
+            var tempStringId = getStringId(csvDatas[line]);
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
                 element.lines.push((line + 2));
                 lineIsValid = false;
             } else {
-                readLinesID.push({ "lines": [(line + 2)], "ID": tempStringId });
+                readLinesID.push({
+                    "lines": [(line + 2)],
+                    "ID": tempStringId
+                });
             }
         }
         if (isAllLangageEmpty(csvDatas[line])) {
@@ -88,9 +93,26 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
     };
 }
 
+function getStringId(element) {
+    var id;
+    if (element.hasOwnProperty('IOS_ID') && element.hasOwnProperty('Android_ID') && element.String_ID.trim().length == 0) {
+        id = toSnakeCase(element.Android_ID).trim() + "_" + toSnakeCase(element.IOS_ID).trim()
+    } else {
+        id = toSnakeCase(element.String_ID)
+    }
+    id += (element.Plural.trim().length == 0 ? "_singular" : "_plural") + "_" + element.Target;
+    return id;
+}
+
 function printConversionFileStrings(sectionStrings) {
     var groups = _.groupBy(sectionStrings, function (value) {
-        return value.Target + '#' + value.String_ID;
+        var id = value.Target + '#';
+        if (value.hasOwnProperty('IOS_ID') && value.hasOwnProperty('Android_ID') && value.String_ID.trim().length == 0) {
+            id += toSnakeCase(value.Android_ID).trim() + "_" + toSnakeCase(value.IOS_ID).trim()
+        } else {
+            id += toSnakeCase(value.String_ID)
+        }
+        return id;
     });
 
     var result = "";
@@ -108,10 +130,17 @@ function printConversionFileStrings(sectionStrings) {
 }
 
 function printSimpleConversionFileString(string) {
-    var result = '<string id="' + toSnakeCase(string.String_ID) + '" target="' + string.Target + '">';
+    var result = '<string id="' + toSnakeCase(string.String_ID);
+    if(string.hasOwnProperty('IOS_ID')){
+        result += '" IOS_ID="' + string.IOS_ID;    
+    }
+    if(string.hasOwnProperty('Android_ID')){
+        result += '" Android_ID="' + string.Android_ID;
+    }
+    result += '" target="' + string.Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(string).length; i++) {
         var key = Object.keys(string)[i];
-        result += '<' + key + " html='"+ string[key].isHTMLFormat() +"'>" + formatValue(string[key]) + '</' + key + '>';
+        result += '<' + key + " html='" + string[key].isHTMLFormat() + "'>" + formatValue(string[key]) + '</' + key + '>';
     }
     result += '</string>';
     return result;
@@ -128,19 +157,27 @@ function handleIdConflict(stringIdConflict) {
 }
 
 function printPluralConversionFileString(plurialsFile) {
-    var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID) + '" target="' + plurialsFile[0].Target + '">';
+    var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID);
+    if(plurialsFile[0].hasOwnProperty('IOS_ID')){
+        result += '" IOS_ID="' + toSnakeCase(plurialsFile[0].IOS_ID);    
+    }
+    if(plurialsFile[0].hasOwnProperty('Android_ID')){
+        result += '" Android_ID="' + toSnakeCase(plurialsFile[0].Android_ID);
+    }
+    result += '" target="' + plurialsFile[0].Target + '">';
+    
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
         result += '<' + key + '>';
-        result += '<' + getQuantity(plurialsFile[0]) + " html='"+ plurialsFile[0][key].isHTMLFormat() +"'>" + formatValue(plurialsFile[0][key]) + "</" + getQuantity(plurialsFile[0]) +">";
-        result += '<' + getQuantity(plurialsFile[1]) + " html='"+ plurialsFile[1][key].isHTMLFormat() +"'>" + formatValue(plurialsFile[1][key]) + "</" + getQuantity(plurialsFile[1]) +">";
+        result += '<' + getQuantity(plurialsFile[0]) + " html='" + plurialsFile[0][key].isHTMLFormat() + "'>" + formatValue(plurialsFile[0][key]) + "</" + getQuantity(plurialsFile[0]) + ">";
+        result += '<' + getQuantity(plurialsFile[1]) + " html='" + plurialsFile[1][key].isHTMLFormat() + "'>" + formatValue(plurialsFile[1][key]) + "</" + getQuantity(plurialsFile[1]) + ">";
         result += '</' + key + '>';
     }
     result += '</string>';
     return result;
 }
 
-function getQuantity(string){
+function getQuantity(string) {
     return string.Plural === "" ? "one" : "many";
 }
 
@@ -148,7 +185,7 @@ function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
     //TODO don't replace all backstack
     //TODO don't remove "
-    return unformattedString.trim().replaceAll('\u2019','\u0027').removeBackslash().toXmlFormat();
+    return unformattedString.trim().replaceAll('\u2019', '\u0027').removeBackslash().toXmlFormat();
 }
 
 function toSnakeCase(unformattedString) {
