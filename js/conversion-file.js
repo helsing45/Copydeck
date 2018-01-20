@@ -30,7 +30,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
         } else {
-            var tempStringId = getStringId(csvDatas[line]);
+            var tempStringId = getConversionFileStringId(csvDatas[line]);
             var element = isStringIdUnique(tempStringId, readLinesID);
             if (element != null) {
                 element.lines.push((line + 2));
@@ -93,7 +93,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
     };
 }
 
-function getStringId(element) {
+function getConversionFileStringId(element) {
     var id;
     if (element.hasOwnProperty('IOS_ID') && element.hasOwnProperty('Android_ID') && element.String_ID.trim().length == 0) {
         id = toSnakeCase(element.Android_ID).trim() + "_" + toSnakeCase(element.IOS_ID).trim()

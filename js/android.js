@@ -18,8 +18,9 @@ function readSectionForAndroidXML(section) {
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "Android") {
-			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {
-				sectionXML += '    <string name="' + string.getAttribute("id") + '">' + xmlToAndroidXmlString(string.getElementsByTagName(this.language)) + '</string>\n';
+			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {				
+				var id = getAndroidStringId(string);
+				sectionXML += '    <string name="' + id + '">' + xmlToAndroidXmlString(string.getElementsByTagName(this.language)) + '</string>\n';
 			} else {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one");
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many");
@@ -34,6 +35,14 @@ function readSectionForAndroidXML(section) {
 		}
 	}
 	return sectionXML;
+}
+
+
+function getAndroidStringId(string){
+	if(string.getAttribute("id").trim().length == 0){
+		return string.getAttribute("Android_ID");
+	}
+	return string.getAttribute("id");
 }
 
 function xmlToAndroidXmlString(valueXml) {
