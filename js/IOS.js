@@ -17,14 +17,17 @@ function readSectionForLocalizableFile(section) {
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "IOS") {
-			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {
-				sectionStringsFile += '"' + string.getAttribute("id") + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
+			if (string.getElementsByTagName(language)[0].childNodes.length == 1) {
+				sectionStringsFile += '"' + getIOSStringId(string) + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
 			} else {
+				if(string.getElementsByTagName(language)[0].getElementsByTagName("one")[0] === undefined || string.getElementsByTagName(language)[0].getElementsByTagName("many")[0] === undefined){
+					continue;
+				}
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one")[0].childNodes[0].nodeValue;
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many")[0].childNodes[0].nodeValue;
 
-				sectionStringsFile += '"' + string.getAttribute("id") + '_singular" = "' + xmlToLocalizableString(single) + '";\n';
-				sectionStringsFile += '"' + string.getAttribute("id") + '_plural" = "' + xmlToLocalizableString(plural) + '";\n';
+				sectionStringsFile += '"' + getIOSStringId(string) + '_singular" = "' + xmlToLocalizableString(single) + '";\n';
+				sectionStringsFile += '"' + getIOSStringId(string) + '_plural" = "' + xmlToLocalizableString(plural) + '";\n';
 			}
 		}
 	}
@@ -54,4 +57,11 @@ function xmlToLocalizableString(unformattedString) {
 	var numberFormattedString = quoteFormattedString.replaceAll('{{number}}','%d');
 	var textFormattedString = numberFormattedString.replaceAll('{{text}}','%@');
 	return handleFloatString(textFormattedString);
+}
+
+function getIOSStringId(string){
+	if(string.getAttribute("id").trim().length == 0){
+		return string.getAttribute("IOS_ID");
+	}
+	return string.getAttribute("id");
 }

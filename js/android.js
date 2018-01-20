@@ -25,7 +25,7 @@ function readSectionForAndroidXML(section) {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one");
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many");
 
-				var pluralsXml = '    <plurals name="' + section.children[index].getAttribute("id") + '">';
+				var pluralsXml = '    <plurals name="' + getAndroidStringId(section.children[index]) + '">';
 				pluralsXml += '\n        <item quantity="one">' + xmlToAndroidXmlString(single) + '</item>';
 				pluralsXml += '\n        <item quantity="other">' + xmlToAndroidXmlString(plural) + '</item>';
 				pluralsXml += '\n    </plurals>\n';
