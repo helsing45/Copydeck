@@ -1,26 +1,8 @@
 /* Some basic style for a loading view when waiting */
-body{    
+
+body {
     width: 65%;
     margin: auto;
-}
-.loader {
-    border: 5px solid #f3f3f3;
-    /* Light grey */
-    border-top: 5px solid #3498db;
-    /* Blue */
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
 }
 
 .error-container {
@@ -31,7 +13,7 @@ body{
     background: rgba(255, 255, 255, 0.95);
     color: #000;
     border-style: groove;
-    padding: 100px 0;
+    height: 250px;
     text-align: center;
     margin: 15px 15px 0px 15px;
 }
@@ -43,7 +25,6 @@ body{
 .drop-zone:hover {
     background: #f3f3f3;
 }
-
 
 li.error {
     color: #f00;
@@ -85,7 +66,11 @@ li.download a:hover {
     border-left: 5px solid #8EBD40;
 }
 
-.bottom{
+.Copydeck {
+    border-left: 5px solid #007934;
+}
+
+.bottom {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -118,7 +103,9 @@ header a:hover {
     color: black;
 }
 
+
 /* Style the tab */
+
 nav {
     float: left;
     border: 1px solid #ccc;
@@ -128,7 +115,9 @@ nav {
     max-width: 185px;
 }
 
+
 /* Style the buttons that are used to open the tab content */
+
 nav button {
     display: block;
     background-color: inherit;
@@ -142,17 +131,23 @@ nav button {
     transition: 0.3s;
 }
 
+
 /* Change background color of buttons on hover */
+
 nav button:hover {
     background-color: #ddd;
 }
 
+
 /* Create an active/current "tab button" class */
+
 nav button.active {
     background-color: #ccc;
 }
 
+
 /* Style the tab content */
+
 .tabcontent {
     float: left;
     padding: 0px 12px;
@@ -163,13 +158,13 @@ nav button.active {
 
 .flex-container {
     display: -webkit-flex;
-    display: flex;  
+    display: flex;
     -webkit-flex-flow: row wrap;
     flex-flow: row wrap;
     text-align: center;
 }
 
-.flex-container > * {
+.flex-container>* {
     -webkit-flex: 1 100%;
     flex: 1 100%;
 }
@@ -179,7 +174,7 @@ nav button.active {
     text-align: left;
 }
 
-footer {    
+footer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -188,9 +183,46 @@ footer {
     padding-bottom: 20px;
 }
 
-
 @media all and (min-width: 768px) {
-    .nav {text-align:left;-webkit-flex: 1 auto;flex:1 auto;-webkit-order:1;order:1;}
-    .article {-webkit-flex:5 0px;flex:5 0px;-webkit-order:2;order:2;}
-    footer {-webkit-order:3;order:3;}
+    .nav {
+        text-align: left;
+        -webkit-flex: 1 auto;
+        flex: 1 auto;
+        -webkit-order: 1;
+        order: 1;
+    }
+    .article {
+        -webkit-flex: 5 0px;
+        flex: 5 0px;
+        -webkit-order: 2;
+        order: 2;
+    }
+    footer {
+        -webkit-order: 3;
+        order: 3;
+    }
+}
+
+#progressbar-bg {
+    width: 310px;
+    border: 1px solid #b3b3b3;
+    border-radius: 3px;
+    margin: auto;
+    visibility: hidden;
+}
+
+#progressbar {
+    height: 100%;
+    width: 0px;
+    color: #fff;
+    background: rgba(58, 146, 65, 0.55);
+    text-align: right;
+}
+
+.detail{
+    margin-top: -155px
+}
+
+fieldset{
+    background-color: #FFF;
 }

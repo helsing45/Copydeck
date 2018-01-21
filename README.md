@@ -56,7 +56,26 @@ iOS-Locale.zip
         |-> Localizable.strings
     |-> {langage-code}.lproj
         |-> Localizable.strings
+        
 ```
+
+# CSV file generator from resource
+This tool allow you to generates a csv file based on resources already in use on an application.
+## Input
+For the proper use of the tools, the input file must have the following format
+```
+resources
+    |-> Base.lproj
+        |-> Localizable.strings
+    |-> {langage-code}.lproj
+        |-> Localizable.strings        
+    |-> values
+        |-> string.xml
+    |-> values-{langage-code}
+        |-> string.xml
+```
+## Output
+The CSV file that will allow you to generate the resource file.
 # Release notes
 ## v0.2.3
 _NEW:_
@@ -73,6 +92,10 @@ _FIX:_
 * The column Plurial is now name plural
 * The plurals of IOS are no longer _plurial it's been correct to _plural
 
+## v0.3.0
+_NEW:_
+* New feature that allows you to generate the csv file from an application's resources
+* Resource generation now allows specifying IDs for android or IOS
 
 
 [//]: # 

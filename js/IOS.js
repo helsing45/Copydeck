@@ -18,7 +18,7 @@ function readSectionForLocalizableFile(section) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "IOS") {
 			if (string.getElementsByTagName(language)[0].childNodes.length == 1) {
-				sectionStringsFile += '"' + getIOSStringId(string) + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
+				sectionStringsFile += '"' + uppercase(getIOSStringId(string)) + '" = "' + xmlToLocalizableString(string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue) + '";\n';
 			} else {
 				if(string.getElementsByTagName(language)[0].getElementsByTagName("one")[0] === undefined || string.getElementsByTagName(language)[0].getElementsByTagName("many")[0] === undefined){
 					continue;
@@ -26,13 +26,18 @@ function readSectionForLocalizableFile(section) {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one")[0].childNodes[0].nodeValue;
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many")[0].childNodes[0].nodeValue;
 
-				sectionStringsFile += '"' + getIOSStringId(string) + '_singular" = "' + xmlToLocalizableString(single) + '";\n';
-				sectionStringsFile += '"' + getIOSStringId(string) + '_plural" = "' + xmlToLocalizableString(plural) + '";\n';
+				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_singular') +' = "' + xmlToLocalizableString(single) + '";\n';
+				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_plural') +' = "' + xmlToLocalizableString(plural) + '";\n';
 			}
 		}
 	}
 	return sectionStringsFile;
 }
+
+function uppercase(string){
+	return document.getElementById('force_uppercase').checked ? string.toUpperCase() : string;
+}
+
 function handleFloatString(unformattedString){
 	// Replace float with no custom decimal
 	unformattedString = unformattedString.replaceAll('{{float}}','%f').replaceAll('{{float:}}','%f');
