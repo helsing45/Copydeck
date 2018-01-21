@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/jquery.csv.js"></script>
+    <script src="js/jszip.js"></script>
+    <script src="js/copydeck.js"></script>
+    <script src="js/ressource-generation.js"></script>
+    <script src="js/conversion-file.js"></script>
+    <script src="js/android.js"></script>
+    <script src="js/IOS.js"></script>
+    <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+    <script src="js/moment.js"></script>
+    <script src="js/base.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style/base.css">
+</head>
+
+<body background="img/bg.jpg">
+
+    <center>
+        <div class="flex-container">
+            <title>Copydeck tools</title>
+            <header>
+                <img src="img/logo.svg" class="img-responsive pull-left" style="margin-right: 16px;" height="54px" width="54px">
+                <h3>Copydeck tools</h3>
+                <a href="https://github.com/helsing45/Copydeck/tree/gh-pages">About</a>
+
+            </header>
+            <nav class="nav">
+                <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'ressource_generation')">Generate string ressources</button>
+                <button class="tablinks" onclick="openCity(event, 'copydeck_generation')">Generate copydeck</button>
+            </nav>
+            <article id="ressource_generation" class="article tabcontent">
+                <div class="container">
+
+                    
+
+                    <div class="drop-zone drop-zone-ressource-generation">
+                        <p style="padding: 100px;">
+                            <b>Drag</b> file here or
+                            <b>click</b> to upload</p>
+                    </div>
+                    <fieldset>
+
+                            <legend>Parameter</legend>
+                            <table>
+                                <tr>
+                                    <td>Force upper case (IOS only)</td>
+                                    <td><input type="checkbox" id="force_uppercase"></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    <div class="error-container">
+                        <ul id="error"></ul>
+                    </div>
+                    <div class="output">
+                        <div class="results-container">
+                            <ul id="results"></ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article id="copydeck_generation" class="article tabcontent">
+                <div class="container">
+                    <div class="drop-zone drop-zone-copydeck-generation">
+                        <div id="progressbar">
+
+                        </div>
+                        <div style="margin-top: -155px;">
+                            <p>
+                                <b>Click</b> to upload the folder containing every resources file</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="error-container">
+                    <ul id="error"></ul>
+                </div>
+                <div class="results-container">
+                    <ul id="results-csv"></ul>
+                </div>
+            </article>
+
+            <footer>
+                <span>Version 0.3.0</span>
+            </footer>
+        </div>
+        <script>
+            function openCity(evt, containerName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName('tablinks');
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(containerName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+
+            (function (window) {
+                function triggerCallback(e, callback) {
+                    if (!callback || typeof callback !== 'function') {
+                        return;
+                    }
+                    var files;
+                    if (e.dataTransfer) {
+                        files = e.dataTransfer.files;
+                    } else if (e.target) {
+                        files = e.target.files;
+                    }
+                    callback.call(null, files);
+                }
+
+                function makeFolderDroppable(ele, callback) {
+                    //webkitdirectory mozdirectory msdirectory odirectory directory multiple="multiple"
+                    var input = document.createElement('input');
+                    input.webkitdirectory = true;
+                    input.mozdirectory = true;
+                    input.msdirectory = true;
+                    input.odirectory = true;
+                    input.directory = true;
+                    input.setAttribute('multiple', true);
+                    input.setAttribute('type', 'file');
+                    input.style.display = 'none';
+
+                }
+
+                function makeDroppable(ele, callback, allowFolder) {
+                    var input = document.createElement('input');
+                    if (allowFolder) {
+                        input.webkitdirectory = true;
+                        input.mozdirectory = true;
+                        input.msdirectory = true;
+                        input.odirectory = true;
+                        input.directory = true;
+                    }
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('multiple', true);
+                    input.style.display = 'none';
+                    input.addEventListener('change', function (e) {
+                        triggerCallback(e, callback);
+                    });
+                    ele.appendChild(input);
+
+                    ele.addEventListener('dragover', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        ele.classList.add('dragover');
+                    });
+
+                    ele.addEventListener('dragleave', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        ele.classList.remove('dragover');
+                    });
+
+                    if (!allowFolder) {
+                        ele.addEventListener('drop', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            ele.classList.remove('dragover');
+                            triggerCallback(e, callback);
+                        });
+                    }
+
+                    ele.addEventListener('click', function () {
+                        input.value = null;
+                        input.click();
+                    });
+                }
+                window.makeDroppable = makeDroppable;
+            })(this);
+
+            (function (window) {
+                makeDroppable(window.document.querySelector('.drop-zone-ressource-generation'), function (files) {
+                    file = files[0];
+                    copydeckFileReader = new FileReader();
+                    copydeckFileReader.onload = receivedCopydeck;
+                    copydeckFileReader.readAsText(file, 'UTF-8');
+                }, false);
+            })(this);
+            (function (window) {
+                makeDroppable(window.document.querySelector('.drop-zone-copydeck-generation'), function (files) {
+                    var loads = [];
+
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i],
+                            reader = new FileReader();
+
+                        reader.onload = (function (file) {
+                            return function (e) {
+                                var decomposed = file.webkitRelativePath.split('/');
+                                var data = this.result;
+                                loads.push({
+                                    name: decomposed[decomposed.length - 2],
+                                    data: data
+                                });
+                                if (loads.length == files.length) {
+                                    onResourceReceived(loads)
+                                }
+                            }
+                        })(file);
+                        reader.readAsText(file, 'UTF-8');
+                    }
+                }, true);
+            })(this);
+        </script>
+    </center>
+</body>
+
+</html>

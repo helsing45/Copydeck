@@ -18,13 +18,14 @@ function readSectionForAndroidXML(section) {
 	for (var index = 0; index < section.children.length; index++) {
 		var string = section.children[index];
 		if (string.getAttribute("target") == "Mobile" || string.getAttribute("target") == "Android") {
-			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {
-				sectionXML += '    <string name="' + string.getAttribute("id") + '">' + xmlToAndroidXmlString(string.getElementsByTagName(this.language)) + '</string>\n';
+			if (section.children[index].getElementsByTagName(language)[0].childNodes.length == 1) {				
+				var id = getAndroidStringId(string);
+				sectionXML += '    <string name="' + id + '">' + xmlToAndroidXmlString(string.getElementsByTagName(this.language)) + '</string>\n';
 			} else {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one");
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many");
 
-				var pluralsXml = '    <plurals name="' + section.children[index].getAttribute("id") + '">';
+				var pluralsXml = '    <plurals name="' + getAndroidStringId(section.children[index]) + '">';
 				pluralsXml += '\n        <item quantity="one">' + xmlToAndroidXmlString(single) + '</item>';
 				pluralsXml += '\n        <item quantity="other">' + xmlToAndroidXmlString(plural) + '</item>';
 				pluralsXml += '\n    </plurals>\n';
@@ -37,12 +38,14 @@ function readSectionForAndroidXML(section) {
 }
 
 
+function getAndroidStringId(string){
+	if(string.getAttribute("id").trim().length == 0){
+		return string.getAttribute("Android_ID");
+	}
+	return string.getAttribute("id");
+}
 
-/* Will change all the {{number}} for %d and {{text}} for %s*/
 function xmlToAndroidXmlString(valueXml) {
-	//string.getElementsByTagName(this.language)
-	//string.getElementsByTagName(this.language)[0].childNodes[0].nodeValue
-	//TODO handle float
 	var floatFormattedString = floatTextFormat(valueXml[0].childNodes[0].nodeValue);
 	var numberFormattedString = numberFormat(floatFormattedString);
 	var stringFormatted = textFormat(numberFormattedString).replaceAll("'", "\\'");

@@ -1,23 +1,8 @@
 /* Some basic style for a loading view when waiting */
 
-.loader {
-    border: 5px solid #f3f3f3;
-    /* Light grey */
-    border-top: 5px solid #3498db;
-    /* Blue */
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+body {
+    width: 65%;
+    margin: auto;
 }
 
 .error-container {
@@ -28,7 +13,7 @@
     background: rgba(255, 255, 255, 0.95);
     color: #000;
     border-style: groove;
-    padding: 100px 0;
+    height: 250px;
     text-align: center;
     margin: 15px 15px 0px 15px;
 }
@@ -40,7 +25,6 @@
 .drop-zone:hover {
     background: #f3f3f3;
 }
-
 
 li.error {
     color: #f00;
@@ -82,7 +66,11 @@ li.download a:hover {
     border-left: 5px solid #8EBD40;
 }
 
-.bottom{
+.Copydeck {
+    border-left: 5px solid #007934;
+}
+
+.bottom {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -91,18 +79,18 @@ li.download a:hover {
     padding-bottom: 20px;
 }
 
-.header {
+header {
     background: #d3d3d3;
     color: #375c63;
     padding: 16px;
     margin-bottom: 15px;
 }
 
-.header h3 {
+header h3 {
     margin: 0;
 }
 
-.header a {
+header a {
     float: right;
     display: block;
     color: #375c63;
@@ -111,13 +99,130 @@ li.download a:hover {
     font-size: 17px;
 }
 
-.header a:hover {
+header a:hover {
     color: black;
 }
-.container{
+
+
+/* Style the tab */
+
+nav {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 30%;
+    height: 300px;
+    max-width: 185px;
+}
+
+
+/* Style the buttons that are used to open the tab content */
+
+nav button {
+    display: block;
+    background-color: inherit;
+    color: black;
+    padding: 22px 16px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+/* Change background color of buttons on hover */
+
+nav button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current "tab button" class */
+
+nav button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    float: left;
+    padding: 0px 12px;
+    width: 70%;
+    border-left: none;
+    height: 300px;
+}
+
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    text-align: center;
+}
+
+.flex-container>* {
+    -webkit-flex: 1 100%;
+    flex: 1 100%;
+}
+
+.article {
+    padding: 15px;
+    text-align: left;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #8a8a8a;
+    padding-bottom: 20px;
+}
+
+@media all and (min-width: 768px) {
+    .nav {
+        text-align: left;
+        -webkit-flex: 1 auto;
+        flex: 1 auto;
+        -webkit-order: 1;
+        order: 1;
+    }
+    .article {
+        -webkit-flex: 5 0px;
+        flex: 5 0px;
+        -webkit-order: 2;
+        order: 2;
+    }
+    footer {
+        -webkit-order: 3;
+        order: 3;
+    }
+}
+
+#progressbar-bg {
+    width: 310px;
+    border: 1px solid #b3b3b3;
+    border-radius: 3px;
+    margin: auto;
+    visibility: hidden;
+}
+
+#progressbar {
+    height: 100%;
+    width: 0px;
+    color: #fff;
+    background: rgba(58, 146, 65, 0.55);
+    text-align: right;
+}
+
+.detail{
+    margin-top: -155px
+}
+
+fieldset{
     background-color: #FFF;
-    width: 60%;
-    margin: 0 auto;
-    padding-bottom: 5px;
-    box-shadow: 0 1px 16px silver
 }
