@@ -26,8 +26,8 @@ function readSectionForLocalizableFile(section) {
 				var single = string.getElementsByTagName(language)[0].getElementsByTagName("one")[0].childNodes[0].nodeValue;
 				var plural = string.getElementsByTagName(language)[0].getElementsByTagName("many")[0].childNodes[0].nodeValue;
 
-				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_singular') +' = "' + xmlToLocalizableString(single) + '";\n';
-				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_plural') +' = "' + xmlToLocalizableString(plural) + '";\n';
+				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_singular') +'" = "' + xmlToLocalizableString(single) + '";\n';
+				sectionStringsFile += '"' + uppercase(getIOSStringId(string) + '_plural') +'" = "' + xmlToLocalizableString(plural) + '";\n';
 			}
 		}
 	}
