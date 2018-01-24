@@ -42,7 +42,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
                 });
             }
         }
-        if (isAllLangageEmpty(csvDatas[line])) {
+        if (document.getElementById('clean_empty').checked && isAllLangageEmpty(csvDatas[line])) {
             lineIsValid = false;
             errors.push("Error line: " + (line + 2) + " doesn't have any string value");
         }
