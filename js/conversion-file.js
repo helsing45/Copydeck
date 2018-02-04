@@ -183,9 +183,14 @@ function getQuantity(string) {
 
 function formatValue(unformattedString) {
     if (unformattedString.length == 0) return " ";
-    //TODO don't replace all backstack
-    //TODO don't remove "
-    return unformattedString.trim().replaceAll('\u2019', '\u0027').removeBackslash().toXmlFormat();
+
+    var formattedString = unformattedString.trim();
+    formattedString = formattedString.replaceAll('\u2019', '\u0027');
+    if (document.getElementById('clean_backslash').checked){
+        formattedString = formattedString.removeBackslash();
+    }
+    formattedString = formattedString.toXmlFormat();
+    return formattedString;
 }
 
 function toSnakeCase(unformattedString) {
