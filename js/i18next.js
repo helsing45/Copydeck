@@ -111,9 +111,9 @@ function i18nextFloatTextFormat(unformattedString) {
 
             //There were not any numbers after the ':', replace as {{float}}
             if (numberIndex === index + 8) {
-                res = res.replace('{{float:}}', `{{decimal${count}}}` // Add format);
-            }
-            else {
+                res = res.replace('{{float:}}', `{{decimal${count}}}`);
+            } else {
+                // Add format
                 var floatPrecision = parseInt(number);
                 var format = '0';
                 if (floatPrecision > 0) {
