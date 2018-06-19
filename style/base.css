@@ -66,6 +66,10 @@ li.download a:hover {
     border-left: 5px solid #8EBD40;
 }
 
+.i18next {
+    border-left: 5px solid #ac00c6;
+}
+
 .Copydeck {
     border-left: 5px solid #007934;
 }
