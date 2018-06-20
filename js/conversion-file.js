@@ -26,6 +26,7 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
         lineIsValid = true;
         if ((csvDatas[line].hasOwnProperty('IOS_ID') && csvDatas[line].IOS_ID.trim().length == 0)
             && (csvDatas[line].hasOwnProperty('Android_ID') && csvDatas[line].Android_ID.trim().length == 0)
+            && (csvDatas[line].hasOwnProperty('Web_ID') && csvDatas[line].Web_ID.trim().length == 0)
             && csvDatas[line].String_ID.trim().length == 0) {
             errors.push("Error line: " + (line + 2) + " doesn't have any ID");
             lineIsValid = false;
@@ -95,8 +96,8 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
 
 function getConversionFileStringId(element) {
     var id;
-    if (element.hasOwnProperty('IOS_ID') && element.hasOwnProperty('Android_ID') && element.String_ID.trim().length == 0) {
-        id = toSnakeCase(element.Android_ID).trim() + "_" + toSnakeCase(element.IOS_ID).trim()
+    if (element.hasOwnProperty('IOS_ID') && element.hasOwnProperty('Android_ID') && element.hasOwnProperty('Web_ID') && element.String_ID.trim().length == 0) {
+        id = toSnakeCase(element.Android_ID).trim() + "_" + toSnakeCase(element.IOS_ID).trim() + "_" + toSnakeCase(element.Web_ID).trim()
     } else {
         id = toSnakeCase(element.String_ID)
     }
@@ -107,8 +108,8 @@ function getConversionFileStringId(element) {
 function printConversionFileStrings(sectionStrings) {
     var groups = _.groupBy(sectionStrings, function (value) {
         var id = value.Target + '#';
-        if (value.hasOwnProperty('IOS_ID') && value.hasOwnProperty('Android_ID') && value.String_ID.trim().length == 0) {
-            id += toSnakeCase(value.Android_ID).trim() + "_" + toSnakeCase(value.IOS_ID).trim()
+        if (value.hasOwnProperty('IOS_ID') && value.hasOwnProperty('Android_ID') && value.hasOwnProperty('Web_ID') && value.String_ID.trim().length == 0) {
+            id += toSnakeCase(value.Android_ID).trim() + "_" + toSnakeCase(value.IOS_ID).trim() + "_" + toSnakeCase(value.Web_ID).trim()
         } else {
             id += toSnakeCase(value.String_ID)
         }
@@ -132,11 +133,16 @@ function printConversionFileStrings(sectionStrings) {
 function printSimpleConversionFileString(string) {
     var result = '<string id="' + toSnakeCase(string.String_ID);
     if(string.hasOwnProperty('IOS_ID')){
-        result += '" IOS_ID="' + string.IOS_ID;    
+        result += '" IOS_ID="' + string.IOS_ID;
     }
     if(string.hasOwnProperty('Android_ID')){
         result += '" Android_ID="' + string.Android_ID;
     }
+
+    if (string.hasOwnProperty('Web_ID')) {
+        result += '" Web_ID="' + string.Web_ID;
+    }
+
     result += '" target="' + string.Target + '">';
     for (i = firstLanguageIndex; i < Object.keys(string).length; i++) {
         var key = Object.keys(string)[i];
@@ -159,13 +165,16 @@ function handleIdConflict(stringIdConflict) {
 function printPluralConversionFileString(plurialsFile) {
     var result = '<string id="' + toSnakeCase(plurialsFile[0].String_ID);
     if(plurialsFile[0].hasOwnProperty('IOS_ID')){
-        result += '" IOS_ID="' + toSnakeCase(plurialsFile[0].IOS_ID);    
+        result += '" IOS_ID="' + toSnakeCase(plurialsFile[0].IOS_ID);
     }
     if(plurialsFile[0].hasOwnProperty('Android_ID')){
         result += '" Android_ID="' + toSnakeCase(plurialsFile[0].Android_ID);
     }
+    if(plurialsFile[0].hasOwnProperty('Web_ID')){
+        result += '" Web_ID="' + toSnakeCase(plurialsFile[0].Web_ID);
+    }
     result += '" target="' + plurialsFile[0].Target + '">';
-    
+
     for (i = firstLanguageIndex; i < Object.keys(plurialsFile[0]).length; i++) {
         var key = Object.keys(plurialsFile[0])[i];
         result += '<' + key + '>';
