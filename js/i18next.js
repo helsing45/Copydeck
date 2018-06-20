@@ -12,7 +12,7 @@ function generatei18nextStringFile(conversionFile, language) {
         var sectionXML = section.getAttribute("id");
         var parent = strings;
         if (sectionXML) {
-            var sectionName = camelize(sectionXML);
+            var sectionName = sectionXML.camelize();
             if (!strings[sectionName])
                 strings[sectionName] = {};
 
@@ -52,16 +52,6 @@ function geti18nextStringId(string) {
         return string.getAttribute("Web_ID");
     }
     return string.getAttribute("id");
-}
-
-function camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-        if (+ match === 0)
-            return ""; // or if (/\s+/.test(match)) for white spaces
-        return index == 0
-            ? match.toLowerCase()
-            : match.toUpperCase();
-    });
 }
 
 function toi18nextString(valueXml) {
