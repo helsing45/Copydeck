@@ -95,24 +95,43 @@ function generateConvertionFile(csvDatas, firstLanguageIndex) {
 }
 
 function getConversionFileStringId(element) {
-    var id;
-    if (element.hasOwnProperty('IOS_ID') && element.hasOwnProperty('Android_ID') && element.hasOwnProperty('Web_ID') && element.String_ID.trim().length == 0) {
-        id = toSnakeCase(element.Android_ID).trim() + "_" + toSnakeCase(element.IOS_ID).trim() + "_" + toSnakeCase(element.Web_ID).trim()
-    } else {
-        id = toSnakeCase(element.String_ID)
-    }
+    var id = buildCustomStringId(element);
     id += (element.Plural.trim().length == 0 ? "_singular" : "_plural") + "_" + element.Target;
     return id;
+}
+
+function buildCustomStringId(element){
+
+    if(element.hasOwnProperty('String_ID') && element.String_ID.length > 0){
+        return toSnakeCase(element.String_ID);
+    }
+    var customID;
+
+    if(element.hasOwnProperty('IOS_ID') && element.IOS_ID.length > 0){
+        customID = toSnakeCase(element.IOS_ID).trim();
+    }
+
+    if(element.hasOwnProperty('Android_ID') && element.Android_ID.length > 0){
+        if(customID.length > 0){
+            customID += "_";
+        }
+        customID += toSnakeCase(element.Android_ID).trim();
+    }
+
+    if(element.hasOwnProperty('Web_ID') && element.Web_ID.length > 0){
+        if(customID.length > 0){
+            customID += "_";
+        }
+        customID += toSnakeCase(element.Web_ID).trim();
+    }
+
+    return customID;
 }
 
 function printConversionFileStrings(sectionStrings) {
     var groups = _.groupBy(sectionStrings, function (value) {
         var id = value.Target + '#';
-        if (value.hasOwnProperty('IOS_ID') && value.hasOwnProperty('Android_ID') && value.hasOwnProperty('Web_ID') && value.String_ID.trim().length == 0) {
-            id += toSnakeCase(value.Android_ID).trim() + "_" + toSnakeCase(value.IOS_ID).trim() + "_" + toSnakeCase(value.Web_ID).trim()
-        } else {
-            id += toSnakeCase(value.String_ID)
-        }
+        id += buildCustomStringId(value);
         return id;
     });
 

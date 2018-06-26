@@ -33,10 +33,20 @@ The __first column of languages__ will be defined as the default. (Base.lproj or
 #### Additional Column
 If you want to add comment columns or any other columns that are not used for file generation, you must add them before the Plural column.
 
+#### Column key
+| Column | Description |
+| ------ | ------ |
+|String_ID*|Default key for the string|
+|IOS_ID| Key for the string, that will be use for IOS ressource|
+|Android_ID| Key for the string, that will be use for android ressource|
+|Web_ID| Key for the string, that will be use for i18Next ressource|
+
+\* _String_ID_ values will override the other column key if not empty.
+
 [Input Exemple]
 
 ## Output
-Once you upload a well formatted copydeck.csv the tool will generate three file.
+Once you upload a well formatted copydeck.csv the tool will generate four files.
 ### ConversionFile.xml
 This file only use is for debug purpose, this file  is the base for generating resource file it allow the conversion between the copydeck.csv and the resource files.
 
@@ -59,8 +69,16 @@ iOS-Locale.zip
         
 ```
 
+### i18Next resources
+```
+i18next-String.zip
+    |-> {langage-code}.json
+        
+```
+
 # CSV file generator from resource
 This tool allow you to generates a csv file based on resources already in use on an application.
+\* Only work with android and IOS resources files.
 ## Input
 For the proper use of the tools, the input file must have the following format
 ```
@@ -96,6 +114,11 @@ _FIX:_
 _NEW:_
 * New feature that allows you to generate the csv file from an application's resources
 * Resource generation now allows specifying IDs for android or IOS
+
+## v0.4.0
+_NEW:_ 
+* The resource generator, now generate i18Next resources
+* It's now possible to specify a key for web.
 
 
 [//]: # 
