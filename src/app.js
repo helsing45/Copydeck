@@ -9,5 +9,7 @@ let csvStr =
 
 
 let csv = new CsvConvertor();
-csv.toConversionItem("./files/mock.csv");
+csv.toConversionItem("./files/mock.csv").then((json) => {
+    var br = true;
+});
 

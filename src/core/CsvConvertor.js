@@ -9,12 +9,11 @@ const SECTION_ID = "Section_ID";
 /*npm run compile*/
 class CsvConvertor extends BaseConvertor {
     toConversionItem(inputPath) {
-        csv()
+        return csv()
             .fromFile(inputPath)
             .then((json) => {
                 var conversionItems = json.map(x => this.jsonObjectToConversionObject(x));
-                var cc = this.associateRelations(conversionItems);
-                var b = true;
+               return this.associateRelations(conversionItems);
             })
     }
 
