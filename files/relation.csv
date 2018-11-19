@@ -1,0 +1,6 @@
+String_ID,relation,en
+student,zero,no student
+student,,{{number}} student
+student,plural,{{number}} students
+no relation,,This string as no relation
+no relation,,Duplicate

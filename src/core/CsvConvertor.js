@@ -1,30 +1,27 @@
 import BaseConvertor from './BaseConvertor'
 import ConversionItem from '../model/ConversionItem'
-import LocalValue from '../model/LocalValue'
+
 const csv = require('csvtojson')
 const LocalCode = require('locale-code')
 const ISO6391 = require('iso-639-1')
-const SECTION_ID = "Section_ID";
 
 /*npm run compile*/
 class CsvConvertor extends BaseConvertor {
-    toConversionItem(inputPath) {
+
+    translateToConversionItems(input) {
         return csv()
-            .fromFile(inputPath)
+            .fromFile(input)
             .then((json) => {
-                var conversionItems = json.map(x => this.jsonObjectToConversionObject(x));
-               return this.associateRelations(conversionItems);
-            })
+                var conversionItems = json.map(x => this._jsonObjectToConversionObject(x));
+                return this._associateRelations(conversionItems);
+            });
     }
 
-    jsonObjectToConversionObject(json) {
+    _jsonObjectToConversionObject(json) {
         var item = new ConversionItem();
         Object.keys(json).forEach(key => {
-            if (ISO6391.validate(key)) {
-                item.addValue(new LocalValue(key, null, json[key]));
-            } else if (LocalCode.validate(key)) {
-                var keySplit = key.split('-');
-                item.addValue(new LocalValue(keySplit[0], keySplit[1], json[key]));
+            if (ISO6391.validate(key) || LocalCode.validate(key)) {
+                item.addValue(key, json[key]);
             } else if (key.toLowerCase().includes("_id")) {
                 if (json[key].trim().length > 0) {
                     item.addId(key, json[key]);
@@ -36,7 +33,7 @@ class CsvConvertor extends BaseConvertor {
         return item;
     }
 
-    associateRelations(items) {
+    _associateRelations(items) {
         var groupedItems = {};
         items.forEach(element => {
             if (!(element.getUniqueId() in groupedItems)) {
@@ -52,36 +49,38 @@ class CsvConvertor extends BaseConvertor {
             if (element.length == 1) {
                 result.push(element[0]);
             } else {
-                result.push(this.handleRelationOf(element));
+                result.push(this._handleRelationOf(element));
             }
         }
         return result;
     }
 
-    handleRelationOf(items) {
+    _handleRelationOf(items) {
         var result = new ConversionItem();
         var hasBeenSetup = false;
 
         for (let index = 0; index < items.length; index++) {
             const element = items[index];
-            var foundRelation = this.findRelation(element);
+            var foundRelation = this._findRelation(element);
             if (!foundRelation) {
-                if(!hasBeenSetup){
-                result.copy(element);
-                hasBeenSetup = true;
-                }else{
+                if (!hasBeenSetup) {
+                    result.copy(element);
+                    hasBeenSetup = true;
+                } else {
                     this._warnings.push("Duplicate ID detected");
                 }
             } else {
-                result.addRelation(foundRelation,element);
+                result.addRelation(foundRelation, element);
             }
 
         }
         return result;
     }
 
-    findRelation(conversionItem) {
-        if(conversionItem.meta["Plural"]){
+    _findRelation(conversionItem) {
+        if(conversionItem.meta["relation"]){
+            return conversionItem.meta["relation"];
+        }else if (conversionItem.meta["Plural"]) {
             return "Plural";
         }
         return "";

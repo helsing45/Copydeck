@@ -1,13 +1,8 @@
-import LocalValue from "./LocalValue";
-import {
-    formatWithOptions
-} from "util";
-
 class ConversionItem {
     constructor() {
-        this._ids = [];
-        this._values = [];
-        this._relation = [];
+        this._ids = {};
+        this._values = {};
+        this._relations;
         this._meta = {};
     }
 
@@ -21,17 +16,16 @@ class ConversionItem {
 
     addId(id, value) {
         var startIndex = id.toLowerCase().indexOf("_id");
-        var formattedId = id.substring(0, startIndex);
-        this._ids.push({
-            [formattedId]: value
-        });
+        var formattedId = id.substring(0, startIndex).toLowerCase();
+        this._ids[formattedId] = value;
     }
 
     getUniqueId() {
         var formattedId = "";
-        for (let index = 0; index < this._ids.length; index++) {
-            var id = this._ids[index];
-            formattedId += id[Object.keys(id)[0]];
+
+        var keys = Object.keys(this._ids);
+        for (let index = 0; index < keys.length; index++) {
+            formattedId += this._ids[keys[index]];
         }
         return formattedId;
     }
@@ -41,25 +35,26 @@ class ConversionItem {
     }
 
     set values(values) {
-        this._values = ids;
+        this._values = values;
     }
 
-    addValue(value) {
-        this._values.push(value);
+    addValue(key, value) {
+        this._values[key] = value;
     }
 
     get relation() {
-        return this._relation;
+        return this._relations;
     }
 
     set relation(relation) {
-        this._relation = relation;
+        this._relations = relation;
     }
 
     addRelation(type, relatedItem) {
-        this._relation.push({
-            [type]: relatedItem
-        })
+        if(this._relations === undefined){
+            this._relations = {};
+        }
+        this._relations[type] = relatedItem;
     }
 
     addMeta(id, value) {
