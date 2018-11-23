@@ -8,12 +8,12 @@ var config = {
 
 new Convertor()
     .setConfig(config)
-    .setInputSrc("./files/variables.csv")
+    .setInputSrc("./files/multiple_ids.csv")
     .setInputType("csv")
     .setOutputType("android")
     .build()
     .then(result => {
-        var b = true;    
+        console.log(result);
     }).catch(e =>{
         console.log(e);
     });

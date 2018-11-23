@@ -2,11 +2,11 @@ import BaseConvertor from './BaseConvertor'
 class AndroidConvertor extends BaseConvertor {
 
     translateFromConversionItems(args) {
-        var availableLang = this._getAvailableLang(args);
-        var groupedItems = this._groupBy(args);
-        var groupedKey = Object.keys(groupedItems);
+        let availableLang = this._getAvailableLang(args);
+        let groupedItems = this._groupBy(args);
+        let groupedKey = Object.keys(groupedItems);
 
-        var stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + new Date().toISOString() + '--> \n<resources>\n';
+        let stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + new Date().toISOString() + '--> \n<resources>\n';
 
         groupedKey.forEach(key => {
             stringXML += key.trim().length == 0 ? "\n" : `<!-- ${key} -->\n`;
@@ -17,9 +17,9 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _getAvailableLang(convertionItems) {
-        var lang = [];
+        let lang = [];
         convertionItems.forEach(element => {
-            var langKeys = Object.keys(element.values);
+            let langKeys = Object.keys(element.values);
             for (let index = 0; index < langKeys.length; index++) {
                 if (lang.indexOf(langKeys[index]) == -1) {
                     lang.push(langKeys[index]);
@@ -30,9 +30,9 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _groupBy(convertionItems) {
-        var groupedBySectionItems = {};
+        let groupedBySectionItems = {};
         convertionItems.forEach(element => {
-            var elementSection = element.meta[this._config["groupBy"]];
+            let elementSection = element.meta[this._config["groupBy"]];
             elementSection = typeof elementSection === "undefined" ? "" : elementSection;
             if (!(elementSection in groupedBySectionItems)) {
                 groupedBySectionItems[elementSection] = [];
@@ -43,7 +43,7 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _printGroup(items, lang) {
-        var group = "";
+        let group = "";
         items.forEach(element => {
             group += this._printItem(element, lang);
         });
@@ -51,15 +51,15 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _printItem(item, lang) {
-        var id = this._getRightId(item);
-        if (id === undefined) {
+        let id = this._getRightId(item);
+        if (!id) {
             throw "String is missing a id";
         }
 
-        if (item.relation === undefined) {
+        if (!item.relation) {
             return `<string name="${id}">${this._formatForXML(item.values[lang])}</string>\n`
         } else {
-            var pluralsXml = `<plurals name="${id}">`;
+            let pluralsXml = `<plurals name="${id}">`;
             if (item.relation['zero']) {
                 pluralsXml += `\n <item quantity="zero">${this._formatForXML(item.relation.zero.values[lang])}</item>`;
             }
@@ -72,13 +72,13 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _getRightId(item) {
-        var specificId = item.ids["android"];
-        return specificId === undefined || specificId.length == 0 ? item.ids["string"] : specificId;
+        let specificId = item.ids["android"];
+        return specificId ? specificId : item.ids["string"];
     }
 
     _formatForXML(unformatted) {
-        var regex = /{{(text|number|float(:.+)?)}}/g;
-        var matchs = unformatted.match(regex);
+        let regex = /{{(text|number|float(:.+)?)}}/g;
+        let matchs = unformatted.match(regex);
         if (matchs != null) {
             for (let occurence = 0; occurence < matchs.length; occurence++) {
                 var foundPattern = matchs[occurence];
