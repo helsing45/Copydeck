@@ -1,5 +1,6 @@
 import CsvConvertor from "../core/CsvConvertor";
 import AndroidConvertor from "../core/AndroidConvertor";
+import IOSConvertor from "../core/IOSConvertor";
 
 class IO {
     constructor() {
@@ -29,6 +30,8 @@ class IO {
                 return new CsvConvertor(config);
             case 'android':
                 return new AndroidConvertor(config);
+            case 'IOS':
+                return new IOSConvertor(config);
             default:
                 throw "IO type is not supported";
         }
