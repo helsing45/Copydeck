@@ -36,8 +36,11 @@ class Convertor {
         var outputConvertor = this._output.getConvertor(this._config);
         return inputConvertor
                 .toConversionItem(this._input.src)
-                .then( r=>{
-                    return outputConvertor.fromConversionItem(r)
+                .then( result =>{
+                    if(this._config.filter){
+                        result = result.filter(item=>eval(this._config.filter));
+                    }
+                    return outputConvertor.fromConversionItem(result);
                 });
 
     }

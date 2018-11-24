@@ -1,0 +1,4 @@
+String_ID,en,target
+android_id,Android specific,android
+generic_string_id,generic,all
+ios_id,ios id,IOS
