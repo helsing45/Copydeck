@@ -63,18 +63,18 @@ class IOSConvertor extends BaseConvertor {
                 var foundPattern = matchs[occurence];
                 switch (foundPattern) {
                     case "{{text}}":
-                        unformatted = unformatted.replace(foundPattern, `%${occurence + 1}$s`)
+                        unformatted = unformatted.replace(foundPattern, `%s`)
                         break;
                     case "{{number}}":
-                        unformatted = unformatted.replace(foundPattern, `%${occurence + 1}$d`)
+                        unformatted = unformatted.replace(foundPattern, `%@`)
                         break;
                     case "{{float}}":
-                        unformatted = unformatted.replace(foundPattern, `%${occurence + 1}$f`)
+                        unformatted = unformatted.replace(foundPattern, `%f`)
                         break;
                     default:
                         if (foundPattern.includes("{{float:")) {
                             var decimal = foundPattern.replace("{{float:", "").replace("}}", "");
-                            unformatted = unformatted.replace(foundPattern, `%${occurence + 1}$.${decimal}f`)
+                            unformatted = unformatted.replace(foundPattern, `%.${decimal}f`)
                         }
 
                 }
