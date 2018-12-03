@@ -1,0 +1,124 @@
+:root{
+    --main-color:#1D9DB5;
+    --main-color-light:#41AABE;
+    --main-dark:#015463;
+    --color-accent:#038BA5;
+}
+.w3-theme-l5 {color:#000 !important; background-color:#f0f0f0 !important}
+.w3-theme-l4 {color:#000 !important; background-color:#B1C6FC !important}
+.w3-theme-l3 {color:#fff !important; background-color:var(--main-color-light) !important}
+.w3-theme-l2 {color:#fff !important; background-color:var(--main-dark) !important}
+.w3-theme-l1 {color:#fff !important; background-color:var(--color-accent) !important}
+.w3-theme-d1 {color:#fff !important; background-color:var(--main-color) !important}
+.w3-theme-d2 {color:#fff !important; background-color:var(--main-color) !important}
+.w3-theme-d3 {color:#fff !important; background-color:var(--main-color) !important}
+.w3-theme-d4 {color:#fff !important; background-color:var(--main-color) !important}
+.w3-theme-d5 {color:#fff !important; background-color:var(--main-color) !important}
+
+.w3-theme-light {color:#000 !important; background-color:var(--main-color-light) !important}
+.w3-theme-dark {color:#fff !important; background-color:var(--main-dark) !important}
+.w3-theme-action {color:#fff !important; background-color:var(--color-accent) !important}
+
+.w3-theme {color:#fff !important; background-color:var(--main-color) !important}
+.w3-text-theme {color:var(--color-accent) !important}
+.w3-border-theme {border-color:var(--main-dark) !important}
+
+.w3-hover-theme:hover {color:#fff !important; background-color:var(--main-dark) !important}
+.w3-hover-text-theme:hover {color:var(--main-dark) !important}
+.w3-hover-border-theme:hover {border-color:var(--main-dark) !important}
+
+.w3-button:hover{color:#fff!important;background-color:var(--main-color-light)!important}
+
+.header{background-image:url(../files/background.jpg) }
+
+/*the container must be positioned relative:*/
+.custom-select {
+    position: relative;
+    font-family: Arial;
+  }
+  .custom-select select {
+    display: none; /*hide original SELECT element:*/
+  }
+  .select-selected {
+    background-color: var(--color-accent);
+  }
+  /*style the arrow inside the select element:*/
+  .select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+  }
+  /*point the arrow upwards when the select box is open (active):*/
+  .select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+  }
+  /*style the items (options), including the selected item:*/
+  .select-items div,.select-selected {
+    color: #ffffff;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+  }
+  /*style items (options):*/
+  .select-items {
+    position: absolute;
+    background-color: var(--color-accent);
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
+  /*hide the items when the select box is closed:*/
+  .select-hide {
+    display: none;
+  }
+  .select-items div:hover, .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: var(--main-color);
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+	color: #f1e5e6;
+	background-color: var(--main-color);
+	border: black;
+	border-width: medium;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 5px;
+	fill: white;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label,
+.inputfile + label:hover {
+    background-color: var(--color-accent);
+}
