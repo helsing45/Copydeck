@@ -80,6 +80,8 @@ typings/
 # FuseBox cache
 .fusebox/
 
+.compiled/*
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json

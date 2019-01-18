@@ -1,0 +1,4 @@
+Android_ID,String_ID,en
+android_string_id,,Android specific
+,generic_string_id,generic
+android_id,string_id,override string

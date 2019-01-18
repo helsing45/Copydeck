@@ -1,0 +1,19 @@
+String_ID,en
+no_variable,Simple string
+single_number_variable_postfix,student {{number}}
+single_number_variable_prefix,{{number}} student
+multiple_number_variable,{{number}} / {{number}}
+single_text_variable_prefix,{{text}} student
+single_text_variable_postfix,student {{text}}
+multiple_text_variable,{{text}} / {{text}}
+single_float_variable_prefix,{{float}} student
+single_float_precision_variable_prefix,{{float:2}} var
+single_float_variable_postfix,student {{float}} 
+single_float_precision_variable_postfix,var {{float:2}} 
+multiple_float_variable,{{float}} / {{float}}
+multiple_float_variable_precision,{{float}} / {{float:2}}
+all_variable,{{text}} with {{number}} cause {{float}}
+special_symbol_percent_number_variable,{{number}}%
+special_symbol_percent_text_variable,{{text}}%
+special_symbol_percent_float_variable,{{float}}%
+special_symbol_percent_float_precise_variable,{{float:2}}%
