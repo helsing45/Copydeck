@@ -1,18 +1,24 @@
 
 import Convertor from './core/Convertor'
 
-var config = {
+var AndroidDefaultConfig = {
     "inputSrcType":"file_path",
     "groupBy":"Section",
-    "filter":'item.meta.target == "android" || item.meta.target == "all"'
-   
 };
 
+var IOSDefaultConfig = {
+    "inputSrcType":"file_path",
+    "groupBy":"Section",
+    "transfomIdFunction":"function(id){return id.toUpperCase();}"
+};
+
+//"filter":'item.meta.target == "android" || item.meta.target == "all"'   
+
 new Convertor()
-    .setConfig(config)
-    .setInputSrc("./files/target.csv")
+    .setConfig(AndroidDefaultConfig)
+    .setInputSrc("./files/relation.csv")
     .setInputType("csv")
-    .setOutputType("android")
+    .setOutputType("IOS")
     .build()
     .then(result => {
         console.log(result);
