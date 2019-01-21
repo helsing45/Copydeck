@@ -4,7 +4,7 @@ class ConvertionItemUtils {
         let groupedBySectionItems = {};
         items.forEach(element => {
             let elementSection = element.meta[group];
-            elementSection = typeof elementSection === "undefined" ? "" : elementSection;
+            elementSection ?   elementSection : "";
             if (!(elementSection in groupedBySectionItems)) {
                 groupedBySectionItems[elementSection] = [];
             }

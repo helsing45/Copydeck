@@ -1,0 +1,7 @@
+[
+    {
+      "path": "",
+      "name": "group.csv",
+      "data": "Section,String_ID,en\r\nSection #1,string_id_01,password\r\nSection #1,string_id_02,sequence\r\nSection #1,string_id_03,giant\r\nSection #1,string_id_04,assignment\r\nSection #1,string_id_05,stride\r\nSection #1,string_id_06,pursuit\r\nSection #1,string_id_07,beat\r\nSection #1,string_id_08,chart\r\nSection #1,string_id_09,rabbit\r\nSection #1,string_id_10,exact\r\n,string_id_11,disappear\r\n,string_id_12,white\r\n,string_id_13,experienced\r\n,string_id_14,cat\r\n,string_id_15,diagram\r\nsection #2,string_id_16,collapse\r\nsection #3,string_id_17,terrify\r\nsection #4,string_id_18,countryside\r\nsection #5,string_id_19,fear\r\nsection #6,string_id_20,smell"
+    }
+]

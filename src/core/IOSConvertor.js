@@ -56,7 +56,7 @@ class IOSConvertor extends BaseConvertor {
     
 
     _formatValue(unformatted){
-        let regex = /{{(text|number|float(:.+)?)}}/g;
+        let regex = /{{(text|number|float|float:[0-9]*)}}/g;
         let matchs = unformatted.match(regex);
         if (matchs != null) {
             for (let occurence = 0; occurence < matchs.length; occurence++) {

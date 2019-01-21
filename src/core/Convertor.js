@@ -1,48 +1,67 @@
 import IO from '../model/IO'
 class Convertor {
-    constructor (){
+    constructor() {
         this._config;
         this._input = new IO();
         this._output = new IO();
     }
 
-    setInputSrc(inputSrc){
+    setInputFilePath(inputSrc) {
         this._input.src = inputSrc;
         return this;
     }
 
-    setInputType(inputType){
+    setInputFile(json) {
+        this._input.file = json;
+        return this;
+    }
+
+    setInputType(inputType) {
         this._input.type = inputType;
         return this;
     }
 
-    setOutputSrc(outputSrc){
+    setOutputSrc(outputSrc) {
         this._output.src = outputSrc;
         return this;
     }
 
-    setOutputType(outputType){
+    setOutputType(outputType) {
         this._output.type = outputType;
         return this;
     }
 
-    setConfig(config){
+    setConfig(config) {
         this._config = config;
         return this;
     }
 
-    build(){
+    build() {
         var inputConvertor = this._input.getConvertor(this._config);
-        var outputConvertor = this._output.getConvertor(this._config);
-        return inputConvertor
-                .toConversionItem(this._input.src)
-                .then( result =>{
-                    if(this._config.filter){
-                        result = result.filter(item=>eval(this._config.filter));
-                    }
-                    return outputConvertor.fromConversionItem(result);
-                });
+        var json = {};
+        if (this._input.file) {
+            json["format"] = "string_data";
+            json["data"] = this._input.file;
+        } else if (this._input.src) {
+            var json = {};
+            json["format"] = "filePath";
+            json["data"] = this._input.src;
+        }
 
+        return inputConvertor
+            .toConversionItem(json)
+            .then((r)=>this.filter(r));
+    }
+
+    filter(result){
+        var outputConvertor = this._output.getConvertor(this._config);
+        if (this._config.filter) {
+            var evaluation = this._config.filter
+            result = result.filter(function(item){
+                return eval(evaluation);
+            });
+        }
+        return outputConvertor.fromConversionItem(result);
     }
 }
-export default Convertor;   
+export default Convertor;

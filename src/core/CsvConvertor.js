@@ -9,12 +9,16 @@ const ISO6391 = require('iso-639-1')
 class CsvConvertor extends BaseConvertor {
 
     translateToConversionItems(input) {
-        return csv()
-            .fromFile(input)
-            .then((json) => {
-                var conversionItems = json.map(x => this._jsonObjectToConversionObject(x));
-                return this._associateRelations(conversionItems);
-            });
+        var csvBuilder;
+        if(input["format"] == 'filePath'){
+            csvBuilder = csv().fromFile(input['data']);
+        }else if(input['format']=='string_data' && input['data'].length > 0 && input['data'][0]['data']){
+            csvBuilder = csv().fromString(input['data'][0]['data'])
+        }
+        return csvBuilder.then((json) => {
+            var conversionItems = json.map(x => this._jsonObjectToConversionObject(x));
+            return this._associateRelations(conversionItems);
+        });
     }
 
     _jsonObjectToConversionObject(json) {
@@ -70,7 +74,7 @@ class CsvConvertor extends BaseConvertor {
                     this._warnings.push("Duplicate ID detected");
                 }
             } else {
-                result.addRelation(foundRelation, element);
+                result.addRelation(foundRelation.toLowerCase(), element);
             }
 
         }

@@ -1,34 +1,89 @@
-/*
-	By Osvaldas Valutis, www.osvaldas.info
-	Available for use under the MIT License
-*/
+(function (window) {
+	
 
-'use strict';
+	function makeDroppable(element, callback) {
+		var input = document.createElement('input');
+		input.webkitdirectory = true;
+		input.mozdirectory = true;
+		input.msdirectory = true;
+		input.odirectory = true;
+		input.directory = true;
+		input.setAttribute('type', 'file');
+		input.setAttribute('multiple', true);
+		input.style.display = 'none';
 
-;( function ( document, window, index )
-{
-	var inputs = document.querySelectorAll( '.inputfile' );
-	Array.prototype.forEach.call( inputs, function( input )
-	{
-		var label	 = input.nextElementSibling,
-			labelVal = label.innerHTML;
+		input.addEventListener('change', function(e) { triggerCallback(e, callback)});
+		element.appendChild(input);
 
-		input.addEventListener( 'change', function( e )
-		{
-			var fileName = '';
-			if( this.files && this.files.length > 1 )
-				fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-			else
-				fileName = e.target.value.split( '\\' ).pop();
-
-			if( fileName )
-				label.querySelector( 'span' ).innerHTML = fileName;
-			else
-				label.innerHTML = labelVal;
+		element.addEventListener('dragover', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			element.classList.add('dragover');
 		});
 
-		// Firefox bug fix
-		input.addEventListener( 'focus', function(){ input.classList.add( 'has-focus' ); });
-		input.addEventListener( 'blur', function(){ input.classList.remove( 'has-focus' ); });
+		element.addEventListener('dragleave', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			element.classList.remove('dragover');
+		});
+
+		element.addEventListener('drop', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			element.classList.remove('dragover');
+			triggerCallback(e, callback);
+		});
+
+		element.addEventListener('click', function (e) {
+			input.value = null;
+			input.click();
+		});
+
+	}
+
+	function triggerCallback(e, callback) {
+		if (!callback || typeof callback !== 'function') {
+			return;
+		}
+		var files;
+		if (e.dataTransfer) {
+			files = e.dataTransfer.files;
+		} else if (e.target) {
+			files = e.target.files;
+		}
+		callback.call(null, files);
+	}
+
+	function onResourceReceived(files){
+		console.log(JSON.stringify(files));
+	}
+	
+	window.makeDroppable = makeDroppable;
+
+	makeDroppable(window.document.querySelector('.drop-zone-input'),
+	function(files){
+		var loads = [];
+
+		for (var i = 0; i < files.length; i++) {
+			var file = files[i],
+				reader = new FileReader();
+
+			reader.onload = (function (file) {
+				return function (e) {
+					var data = this.result;
+					loads.push({
+						path: file.webkitRelativePath,
+						name: file.name,
+						data: data
+					});
+					if (loads.length == files.length) {
+						onResourceReceived(loads)
+					}
+				}
+			})(file);
+			reader.readAsText(file, 'UTF-8');
+		}
 	});
-}( document, window, 0 ));
+
+
+})(this);

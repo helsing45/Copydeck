@@ -1,5 +1,6 @@
 :root{
     --main-color:#1D9DB5;
+    --main-color-60:#1D9DB53C;
     --main-color-light:#41AABE;
     --main-dark:#015463;
     --color-accent:#038BA5;
@@ -121,4 +122,27 @@
 .inputfile.has-focus + label,
 .inputfile + label:hover {
     background-color: var(--color-accent);
+}
+
+.drop-zone {
+  color: var(--main-color);
+  border-style: dashed;
+  text-align: center;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 7px;
+}
+
+.drop-zone .info p{
+  color: var(--main-dark);
+}
+
+.drop-zone .info p b{
+  color: var(--main-color);
+}
+
+.drop-zone.dragover, 
+.drop-zone:hover {
+  background:var(--main-color-60);
+  color: var(--main-color-light);
 }

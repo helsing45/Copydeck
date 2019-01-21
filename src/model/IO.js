@@ -5,6 +5,7 @@ import IOSConvertor from "../core/IOSConvertor";
 class IO {
     constructor() {
         this._src;
+        this._file;
         this._type;
     }
 
@@ -22,6 +23,14 @@ class IO {
 
     set type(type) {
         this._type = type;
+    }
+
+    get file() {
+        return this._file;
+    }
+
+    set file(file) {
+        this._file = file;
     }
 
     getConvertor(config) {

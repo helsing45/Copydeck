@@ -1,5 +1,7 @@
 import BaseConvertor from './BaseConvertor'
 import ConvertionItemUtils from '../utils/ConvertionItemUtils'
+import * as StringUtils from './extension/StringExt'
+
 class AndroidConvertor extends BaseConvertor {
 
     translateFromConversionItems(args) {
@@ -9,16 +11,13 @@ class AndroidConvertor extends BaseConvertor {
 
         let stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + new Date().toISOString() + '--> \n<resources>\n';
 
-        groupedKey.forEach(key => {
-            stringXML += key.trim().length == 0 ? "\n" : `<!-- ${key} -->\n`;
-            stringXML += this._printGroup(groupedItems[key], availableLang[0]);
-        });
+        groupedKey.forEach((key) => stringXML += this._printGroup(key,groupedItems[key],availableLang[0]));
         stringXML += '</resources>'
         return stringXML;
     }
 
-    _printGroup(items, lang) {
-        let group = "";
+    _printGroup(key,items,lang) {
+        let group = key.trim().length == 0 ? "\n" : `<!-- ${key} -->\n`;;
         items.forEach(element => {
             group += this._printItem(element, lang);
         });
@@ -57,7 +56,7 @@ class AndroidConvertor extends BaseConvertor {
     }
 
     _formatForXML(unformatted) {
-        let regex = /{{(text|number|float(:.+)?)}}/g;
+        let regex = /{{(number|text|float|float:[0-9]*)}}/g;
         let matchs = unformatted.match(regex);
         if (matchs != null) {
             for (let occurence = 0; occurence < matchs.length; occurence++) {
@@ -81,7 +80,8 @@ class AndroidConvertor extends BaseConvertor {
                 }
             }
         }
-
+        unformatted = StringUtils.replaceAll(unformatted,"'","\\'");
+        unformatted = StringUtils.toXMLFormat(unformatted);
         return unformatted;
     }
 }
