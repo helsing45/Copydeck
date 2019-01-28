@@ -57,10 +57,55 @@
         <div class="w3-half">
             <div class="w3-card w3-container" style="min-height:460px">
                 <h3>Configuration</h3><br>
-                <i class="fas fa-cogs w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
-                <p>
-                    <a class="w3-button w3-theme">Button</a>
-                </p>
+                <i class="fas fa-cogs w3-margin-bottom w3-text-theme" style="font-size:120px"></i><br>
+                <!--Advance settings-->
+                <div align='right'>
+                    <button class="collapsible">Advance settings</button>
+                    <div class="content">
+                        <table class="advance-setting-table">
+                            <tr>
+                                <td align="left" style="width:50%"><b>Group by</b></td>
+                                <td align="left" style="width:44.5%"><b>Filter by</b></td>
+                                <td style="width:5.5%" onclick="addFilterGroupParam()">
+                                    <a class="w3-button w3-theme">+</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input class="input-component-100" type="text" name="group_by">
+                                </td>
+
+                                <td colspan="2" style="width:100%">
+                                    <table id="filter_by_table" class="advance-setting-table">
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><b>Transform ID:</b></td>
+                            </tr>
+                            <tr>
+                                <table style="width:100%">
+                                    <tr>
+                                        <td><input type="radio" name="idTransform" value="function(id){return id.toUpperCase();}">
+                                            UpperCase</td>
+
+                                            <td><input type="radio" name="idTransform" value="function(id){return id.toLowerCase();}">
+                                                Lowercase</td>
+                                    </tr>
+                                </table>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        <a class="w3-button w3-theme" onclick="generateSettings()">Button</a>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
             </div>
         </div>
 
@@ -124,6 +169,20 @@
             });
         }
 
+        var coll = document.getElementsByClassName("collapsible");
+
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+
         function closeAllSelect(elmnt) {
             /*a function that will close all select boxes in the document,
             except the current select box:*/
@@ -143,9 +202,101 @@
                 }
             }
         }
-        /*if the user clicks anywhere outside the select box,
-        then close all select boxes:*/
         document.addEventListener("click", closeAllSelect);
+
+        function addFilterGroupParam(){            
+            var table = document.getElementById("filter_by_table"); 
+            var groupCount = table.rows.length;           
+            var row = table.insertRow(0);
+            var cell = row.insertCell(0);
+            cell.colspan='2';
+
+            var newTableId = 'filter_group_'+groupCount;
+            var newTable = document.createElement('table');
+            newTable.id = newTableId;
+            newTable.width = '100%';
+            newTable.classList.add('filter-group');
+            var newRow = newTable.insertRow(0);
+            var cell1 = newRow.insertCell(0);
+            var spacer = newRow.insertCell(1);
+            var cell2 = newRow.insertCell(2);
+            var cell3 = newRow.insertCell(3);
+
+            cell1.width='25%';    
+            cell1.innerHTML = getBooleanOperatorSelect('group_operator_'+groupCount);
+
+            spacer.width='64%';
+
+            cell2.innerHTML = '<a class="w3-button w3-theme" onclick="addFilterParam(\''+newTableId+'\')">+</a>';
+            cell3.innerHTML = '<a class="w3-button w3-theme" onclick="removeRow(\'filter_by_table\','+groupCount+')">x</a>';
+            
+            cell.innerHTML = newTable.outerHTML;
+        }
+        function addFilterParam(tableId) {
+            var table = document.getElementById(tableId);
+            var operatorIndex = table.rows.length;
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            if (operatorIndex > 1) {
+                cell1.innerHTML = getBooleanOperatorSelect(tableId + '_boolean_select_'+ operatorIndex);
+            }
+            cell1.width = "25%";
+            cell2.colSpan = '2';        
+            cell2.innerHTML = '<input class="input-component-100" type="text" name="expression" id="'+tableId+'_expression_' + operatorIndex + '">';
+            cell3.innerHTML = '<a class="w3-button w3-theme" onclick="removeRow(\''+tableId+'\','+operatorIndex+')">x</a>';
+        }
+
+        function getBooleanOperatorSelect(id) {
+            var select = '<select name="boolean_operator" id="'+id+'">';
+            select += '<option value="&&">And</option>';
+            select += '<option value="||">Or</option>';
+            select += '</select>';
+            return select;
+        }
+
+        function removeRow(tableId,rowIndex){
+            var table = document.getElementById(tableId);
+            table.deleteRow(rowIndex);
+        }
+
+        function generateSettings() {
+            var settings={};
+            var idTransformation = document.querySelector('input[name="idTransform"]:checked');
+            if(idTransformation){
+                settings["transfomIdFunction"] = idTransformation.value;
+            }
+            settings["filter"] = generateFilterExpression();
+            settings['groupBy'] = document.querySelector('input[name="group_by"]').value;
+            
+		console.log(JSON.stringify(settings));
+        }
+
+        function generateFilterExpression(){
+            var expression = '';
+            var table = document.getElementById('filter_by_table');            
+            for (let index = 0; index < table.rows.length; index++) {
+                if(index > 0){
+                    expression += document.getElementById('group_operator_' + index).value;
+                }
+                expression += '('+ readFilterGroup('filter_group_'+index) +')';
+            }
+            return expression;
+        }
+
+        function readFilterGroup(groupID){
+            var expression = '';
+            var table = document.getElementById(groupID);
+            for (let index = 1; index < table.rows.length; index++) {
+                const row = table.rows[index];
+                if (index > 1) {
+                    expression += document.getElementById(groupID + '_boolean_select_'+ index).value;
+                }
+                expression += document.getElementById(groupID+'_expression_' + index ).value;                
+            }
+            return expression;
+        }
     </script>
     <script src="js/custom-file-input.js"></script>
 </body>

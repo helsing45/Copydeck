@@ -10,6 +10,7 @@ var AndroidDefaultConfig = {
 var IOSDefaultConfig = {
     "inputSrcType":"file_path",
     "groupBy":"Section",
+    "filter":'item.meta.Target == "android" || item.meta.Target == "all" || item.meta.Target == "Mobile"',
     "transfomIdFunction":"function(id){return id.toUpperCase();}"
 };
 

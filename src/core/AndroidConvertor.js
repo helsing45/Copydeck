@@ -8,10 +8,20 @@ class AndroidConvertor extends BaseConvertor {
         let availableLang = ConvertionItemUtils.findLanguages(args);
         let groupedItems = ConvertionItemUtils.groupBy(this._config["groupBy"],args);
         let groupedKey = Object.keys(groupedItems).sort();
+        var result ={};
 
+        for (let langIndex = 0; langIndex < availableLang.length; langIndex++) {
+            const lang = availableLang[langIndex];
+            result[lang] = this._printForLang(groupedItems,groupedKey,lang)
+        }
+        return result;
+      
+    }
+
+    _printForLang(items,keys,lang){
         let stringXML = '<?xml version="1.0" encoding="utf-8"?> \n  <!-- generation time : ' + new Date().toISOString() + '--> \n<resources>\n';
 
-        groupedKey.forEach((key) => stringXML += this._printGroup(key,groupedItems[key],availableLang[0]));
+        keys.forEach((key) => stringXML += this._printGroup(key,items[key],lang));
         stringXML += '</resources>'
         return stringXML;
     }

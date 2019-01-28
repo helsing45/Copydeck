@@ -3,7 +3,10 @@
     --main-color-60:#1D9DB53C;
     --main-color-light:#41AABE;
     --main-dark:#015463;
-    --color-accent:#038BA5;
+    --color-accent:#038BA5;    
+    --color-accent-60:#038BA53C;
+    --text-color-white:#FFF;
+    --white-30:#FFFFFF4C;
 }
 .w3-theme-l5 {color:#000 !important; background-color:#f0f0f0 !important}
 .w3-theme-l4 {color:#000 !important; background-color:#B1C6FC !important}
@@ -28,7 +31,10 @@
 .w3-hover-text-theme:hover {color:var(--main-dark) !important}
 .w3-hover-border-theme:hover {border-color:var(--main-dark) !important}
 
-.w3-button:hover{color:#fff!important;background-color:var(--main-color-light)!important}
+.w3-button:hover{
+  color:#fff!important;
+  background-color:var(--main-color-light)!important
+}
 
 .header{background-image:url(../files/background.jpg) }
 
@@ -145,4 +151,82 @@
 .drop-zone:hover {
   background:var(--main-color-60);
   color: var(--main-color-light);
+}
+
+.advance-setting-table{
+  width: 100%;
+}
+
+.advance-setting-table .input-component-100{
+  width: 100%;
+}
+
+.popup-info{
+    position: relative;
+    cursor: help;  
+}
+
+.popup-info:hover::after,
+.popup-info:focus::after {
+  content: attr(aria-label);
+  position: absolute;
+  top: -2.4em;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  color:var(--text-color-white);
+  background: var(--main-color-light);
+  width: 250px;
+  padding: 5px;
+}
+
+.collapsible {
+  color:var(--text-color-white);
+  background-color:var(--main-color);
+  cursor: pointer;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;  
+  border-bottom: 2px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+  border-top: 2px solid var(--color-accent);
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active{
+  color:var(--text-color-white);
+  background-color:var(--main-color-light);
+  cursor: pointer;
+  border-left: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+  border-top: 2px solid var(--color-accent);
+  border-bottom: 0px solid var(--color-accent);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.collapsible:hover {
+  color:#fff;
+  background-color:var(--main-color-light);
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: var(--color-accent-60);
+}
+
+.filter-group{
+  background: var(--color-accent-60);
+  border: 1px solid var(--color-accent);
 }
