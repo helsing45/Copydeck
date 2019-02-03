@@ -38,58 +38,6 @@
 
 .header{background-image:url(../files/background.jpg) }
 
-/*the container must be positioned relative:*/
-.custom-select {
-    position: relative;
-    font-family: Arial;
-  }
-  .custom-select select {
-    display: none; /*hide original SELECT element:*/
-  }
-  .select-selected {
-    background-color: var(--color-accent);
-  }
-  /*style the arrow inside the select element:*/
-  .select-selected:after {
-    position: absolute;
-    content: "";
-    top: 14px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;
-  }
-  /*point the arrow upwards when the select box is open (active):*/
-  .select-selected.select-arrow-active:after {
-    border-color: transparent transparent #fff transparent;
-    top: 7px;
-  }
-  /*style the items (options), including the selected item:*/
-  .select-items div,.select-selected {
-    color: #ffffff;
-    padding: 8px 16px;
-    border: 1px solid transparent;
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-    cursor: pointer;
-  }
-  /*style items (options):*/
-  .select-items {
-    position: absolute;
-    background-color: var(--color-accent);
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99;
-  }
-  /*hide the items when the select box is closed:*/
-  .select-hide {
-    display: none;
-  }
-  .select-items div:hover, .same-as-selected {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
   .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -153,80 +101,44 @@
   color: var(--main-color-light);
 }
 
-.advance-setting-table{
+.full-table{
   width: 100%;
 }
 
-.advance-setting-table .input-component-100{
+.cell-config-type{
+  width: 50%;
+}
+
+.code-textarea {
+  padding: 1rem;
+  font-size: 16px;
   width: 100%;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 0.8rem;
+  line-height: 1.2;  
+  border: 1px solid var(--color-accent);  
+  color:var(--main-dark);
 }
 
-.popup-info{
-    position: relative;
-    cursor: help;  
-}
-
-.popup-info:hover::after,
-.popup-info:focus::after {
-  content: attr(aria-label);
-  position: absolute;
-  top: -2.4em;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  color:var(--text-color-white);
-  background: var(--main-color-light);
-  width: 250px;
+.input{
+  font-size: 18px;
   padding: 5px;
+  color: var(--main-color);
+  text-align: center;
+  padding: 5px;
+  border-left: 1px solid var(--main-color-light);
+  border-top:1px solid var(--main-color-light);
+  border-bottom:1px solid var(--main-color-light);
+  border-right:1px solid var(--main-color-light);
+}
+.strings{  
+  border-left: 10px solid #61A8DC;
 }
 
-.collapsible {
-  color:var(--text-color-white);
-  background-color:var(--main-color);
-  cursor: pointer;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;  
-  border-bottom: 2px solid var(--color-accent);
-  border-left: 2px solid var(--color-accent);
-  border-right: 2px solid var(--color-accent);
-  border-top: 2px solid var(--color-accent);
-  text-align: left;
-  outline: none;
-  font-size: 15px;
+.xml{  
+  border-left: 10px solid #8EBD40;
 }
 
-.active{
-  color:var(--text-color-white);
-  background-color:var(--main-color-light);
-  cursor: pointer;
-  border-left: 2px solid var(--color-accent);
-  border-right: 2px solid var(--color-accent);
-  border-top: 2px solid var(--color-accent);
-  border-bottom: 0px solid var(--color-accent);
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
-.collapsible:hover {
-  color:#fff;
-  background-color:var(--main-color-light);
-}
-
-/* Style the collapsible content. Note: hidden by default */
-.content {
-  padding: 0 18px;
-  display: none;
-  overflow: hidden;
-  background-color: var(--color-accent-60);
-}
-
-.filter-group{
-  background: var(--color-accent-60);
-  border: 1px solid var(--color-accent);
+.csv{  
+  border-left: 5px solid #8e49e8;
 }

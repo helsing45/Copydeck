@@ -55,7 +55,8 @@
 	}
 
 	function onResourceReceived(files){
-		console.log(JSON.stringify(files));
+		inputFiles = files;
+		displayInput(files);
 	}
 	
 	window.makeDroppable = makeDroppable;
@@ -71,9 +72,11 @@
 			reader.onload = (function (file) {
 				return function (e) {
 					var data = this.result;
+					var splitted = file.name.split('.');
 					loads.push({
 						path: file.webkitRelativePath,
 						name: file.name,
+						extension:splitted[splitted.length-1],
 						data: data
 					});
 					if (loads.length == files.length) {
