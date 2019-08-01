@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./css/theme.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 
 <body>
@@ -24,34 +24,29 @@
     </header>
 
     <div class="w3-row-padding w3-center w3-margin-top">
-        <div class="w3-quarter">
+        <div class="w3-half">
             <div class="w3-card w3-container" style="min-height:460px">
-                <h3>Input</h3><br>
-                <i class="fas fa-file-import w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
+                <div class="container">
+                    <div class="drop-zone drop-zone-input">
 
-                <br />
-                <p>
-                    <div class="container">
-                        <div class="drop-zone drop-zone-input">
-                            <div class="info">
-                                <p>
-                                    <b>Click</b> to upload the folder containing every resources file</p>
-                            </div>
+                        <i class="fas fa-file-import w3-margin-bottom w3-icon-theme"></i>
+                        <div class="info">
+                            <p>
+                                <b>Click</b> to upload the folder containing every resources file</p>
                         </div>
-
                     </div>
 
-                </p>
+                </div>
                 <table id="inputs" class="full-table"></table>
-                
+
 
             </div>
         </div>
 
-        <div class="w3-half">
+        <!--<div class="w3-half">
             <div class="w3-card w3-container" style="min-height:460px">
                 <h3>Configuration</h3><br>
-                <i class="fas fa-cogs w3-margin-bottom w3-text-theme" style="font-size:120px"></i><br>
+                <i class="fas fa-cogs w3-margin-bottom w3-icon-theme"></i><br>
                 <div>
                     <table class="full-table">
                         <tr>
@@ -69,59 +64,76 @@
 
 
             </div>
-        </div>
+        </div>-->
 
-        <div class="w3-quarter">
+        <div class="w3-half">
             <div class="w3-card w3-container" style="min-height:460px">
-                <h3>Output</h3><br>
-                <i class="fas fa-file-export w3-margin-bottom w3-text-theme" style="font-size:120px"></i>
-                <a class="w3-button w3-theme" onclick="generateOutput()">Button</a>
+                <div>
+
+                    <table class="full-table">
+                        <tr>
+                            <td>
+                                    <div class="dropdown">
+                                            <button id="outputPicker" class="dropbtn">Output</button>
+                                            <div class="dropdown-content">
+                                                <a onclick='outputPick("Android")'>Android</a>
+                                                <a onclick='outputPick("IOS")'>IOS</a>
+                                                <a onclick='outputPick("I18Next")'>i18Next</a>
+                                                <a onclick='outputPick("Csv")'>Csv</a>
+                                            </div>
+                                        </div>
+                            </td>
+                            <td>
+                                    <button class="btn-output-settings" class="toggleSettingsVisibility()"><i class="fas fa-cogs"></i></button>
+                                    
+                        </tr>
+                        <tr>
+                            <table id="output-settings">
+                                <tr><td>TEST</td></tr>
+                            </table>
+                            </tr>
+                    </table>
+
+                    
+                    <div class="lock-cirle">
+                        <i class="fas fa-file-export w3-icon-theme lock-icon"></i>
+                    </div>
+                </div>
+
+
+                <!-- <h3>Output</h3><br>
+                
+                <a class="w3-button w3-theme" onclick="generateOutput()">Button</a> -->
             </div>
         </div>
     </div>
 
     <script>
-    var inputFiles;       
+        var inputFiles;
 
-        function customConfigOptionChanged(view) {
-            switch(view.value){
-                case 'android':
-                displayConfigFile('{\n'+
-                    '"inputSrcType":"file_path",\n'+
-                    '"groupBy":"Section",\n'+
-                    '"filter":\'item.meta.Target == "android" || item.meta.Target == "all" || item.meta.Target == "Mobile"\'\n'+
-                '}');
-                break;
-                case 'IOS':
-                displayConfigFile('{\n'+
-                    '"inputSrcType":"file_path",\n'+
-                    '"groupBy":"Section",\n'+
-                    '"filter":\'item.meta.Target == "IOS" || item.meta.Target == "all" || item.meta.Target == "Mobile"\'\n'+
-                    '"transfomIdFunction":"function(id){return id.toUpperCase();"\n'+
-                '}');
-                break;
-            }
+        function outputPick(output){
+            console.log("Output is now: " + output);
+            document.getElementById('outputPicker').textContent  = output;
         }
 
-        function displayConfigFile(jsonConfig){
+        function displayConfigFile(jsonConfig) {
             document.getElementById('config_file_preview').value = jsonConfig;
         }
 
-        function displayInput(files){
+        function displayInput(files) {
             var inputTable = document.getElementById('inputs');
             for (let index = 0; index < files.length; index++) {
                 const file = files[index];
                 var row = inputTable.insertRow(0);
                 var cell = row.insertCell(0);
-                cell.classList.add(file.extension, 'input');  
+                cell.classList.add(file.extension, 'input');
                 cell.innerHTML = file.name;
             }
         }
 
-        function generateOutput(){
+        function generateOutput() {
             var s = true;
         }
-
     </script>
     <script src="js/custom-file-input.js"></script>
 </body>
