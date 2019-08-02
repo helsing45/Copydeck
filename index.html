@@ -72,32 +72,39 @@
 
                     <table class="full-table">
                         <tr>
-                            <td>
-                                    <div class="dropdown">
-                                            <button id="outputPicker" class="dropbtn">Output</button>
-                                            <div class="dropdown-content">
-                                                <a onclick='outputPick("Android")'>Android</a>
-                                                <a onclick='outputPick("IOS")'>IOS</a>
-                                                <a onclick='outputPick("I18Next")'>i18Next</a>
-                                                <a onclick='outputPick("Csv")'>Csv</a>
-                                            </div>
-                                        </div>
+                            <td style="width: 100%">
+                                <div class="dropdown">
+                                    <button id="outputPicker" class="dropbtn">Output</button>
+                                    <div class="dropdown-content">
+                                        <a onclick='outputPick("Android")'>Android</a>
+                                        <a onclick='outputPick("IOS")'>IOS</a>
+                                        <a onclick='outputPick("I18Next")'>i18Next</a>
+                                        <a onclick='outputPick("Csv")'>Csv</a>
+                                    </div>
+                                </div>
                             </td>
                             <td>
-                                    <button class="btn-output-settings" class="toggleSettingsVisibility()"><i class="fas fa-cogs"></i></button>
-                                    
+                                <button class="btn-output-settings" onclick='toggleSettingsVisibility()''><i
+                                        class="fas fa-cogs"></i></button>
+
                         </tr>
                         <tr>
-                            <table id="output-settings">
-                                <tr><td>TEST</td></tr>
+                            <table id="output-settings" style="border: 1px solid black; width: 100%; display:none">
+                                <tr>
+                                    <td>
+                                    Group by: <input type="text" id="group_by" style="width: 100%;" value="Section">
+                                </td>
+                                </tr>
+                                <tr><td>
+                                    Filter : <input type="text" id="filter" style="width: 100%;">
+                                </td>
+                                </tr>
+                                
                             </table>
-                            </tr>
-                    </table>
+                        </tr>
 
-                    
-                    <div class="lock-cirle">
-                        <i class="fas fa-file-export w3-icon-theme lock-icon"></i>
-                    </div>
+                        <tr><td><button class="btn-export"><i class="fas fa-file-export "></i> Export</button></td></tr>
+                    </table>
                 </div>
 
 
@@ -111,9 +118,30 @@
     <script>
         var inputFiles;
 
-        function outputPick(output){
-            console.log("Output is now: " + output);
-            document.getElementById('outputPicker').textContent  = output;
+        function outputPick(output) {
+                console.log("Output is now: " + output);
+                let filterInput = document.getElementById('filter');
+                switch (output) {
+                    case "Android":
+                        filterInput.value = 'Target == "Mobile" || Target == "Android"';
+                        break;
+                    case "IOS":
+                        filterInput.value = 'Target == "Mobile" || Target == "IOS"';
+                        break;
+                    case "I18Next":
+                        filterInput.value = 'Target == "Web"';
+                        break;
+                }
+                document.getElementById('outputPicker').textContent = output;
+            }
+
+        function toggleSettingsVisibility() {
+            var x = document.getElementById("output-settings");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
         }
 
         function displayConfigFile(jsonConfig) {
