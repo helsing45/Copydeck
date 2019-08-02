@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/theme.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <script src="./js/translator.js"></script>
 </head>
 
 <body>
@@ -42,29 +43,6 @@
 
             </div>
         </div>
-
-        <!--<div class="w3-half">
-            <div class="w3-card w3-container" style="min-height:460px">
-                <h3>Configuration</h3><br>
-                <i class="fas fa-cogs w3-margin-bottom w3-icon-theme"></i><br>
-                <div>
-                    <table class="full-table">
-                        <tr>
-                            <td class="cell-config-type"><input type="radio" name="quick_config" value="android" onchange="customConfigOptionChanged(this)">
-                                Android</td>
-                            <td class="cell-config-type"><input type="radio" name="quick_config" value="IOS" onchange="customConfigOptionChanged(this)">IOS</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                  <textarea class="code-textarea" id="config_file_preview" cols="30" rows="10"></textarea>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-
-            </div>
-        </div>-->
 
         <div class="w3-half">
             <div class="w3-card w3-container" style="min-height:460px">
@@ -103,20 +81,20 @@
                             </table>
                         </tr>
 
-                        <tr><td><button class="btn-export"><i class="fas fa-file-export "></i> Export</button></td></tr>
+                        <tr><td><button class="btn-export" onclick='exportFiles()'><i class="fas fa-file-export "></i> Export</button></td></tr>
                     </table>
                 </div>
-
-
-                <!-- <h3>Output</h3><br>
-                
-                <a class="w3-button w3-theme" onclick="generateOutput()">Button</a> -->
             </div>
         </div>
     </div>
 
     <script>
         var inputFiles;
+        function exportFiles(){
+            let output = document.getElementById('outputPicker').textContent;
+            translateFromCsv();
+
+        }
 
         function outputPick(output) {
                 console.log("Output is now: " + output);
@@ -144,10 +122,6 @@
             }
         }
 
-        function displayConfigFile(jsonConfig) {
-            document.getElementById('config_file_preview').value = jsonConfig;
-        }
-
         function displayInput(files) {
             var inputTable = document.getElementById('inputs');
             for (let index = 0; index < files.length; index++) {
@@ -157,10 +131,6 @@
                 cell.classList.add(file.extension, 'input');
                 cell.innerHTML = file.name;
             }
-        }
-
-        function generateOutput() {
-            var s = true;
         }
     </script>
     <script src="js/custom-file-input.js"></script>

@@ -1,0 +1,22 @@
+{
+  "name": "copydeck-web",
+  "version": "1.0.0",
+  "description": "Web site for copydeck module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helsing45/Copydeck.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helsing45/Copydeck/issues"
+  },
+  "homepage": "https://github.com/helsing45/Copydeck#readme",
+  "dependencies": {
+    "copydeck-module": "^1.0.0-beta5.2"
+  }
+}
